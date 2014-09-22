@@ -35,7 +35,8 @@ public class Glow implements ApplicationListener {
 	   private TextureRegion currentFrame;
 	   private float stateTime;
 	   private static final int	FRAME_COLS = 5;
-	   private static final int	FRAME_ROWS = 2; 
+	   private static final int	FRAME_ROWS = 4;
+	   private float escalatorMoveTime = 0;
 
 	   @Override
 	   public void create() {
@@ -56,7 +57,7 @@ public class Glow implements ApplicationListener {
 		  bagValues = new int[]{0, 100,200,300,400,500};
 		  bags = new ArrayList<Bag>(6);
 		  
-		  escalator = new Texture(Gdx.files.internal("Spritesheet.png"));
+		  escalator = new Texture(Gdx.files.internal("SS_Rullebond_Ver001.png"));
 		  
 			TextureRegion[][] tmp = TextureRegion.split(escalator, escalator.getWidth()/FRAME_COLS, escalator.getHeight()/FRAME_ROWS);              // #10
 			escalatorRegion = new TextureRegion[FRAME_COLS * FRAME_ROWS];
@@ -104,19 +105,21 @@ public class Glow implements ApplicationListener {
 	    while(iter.hasNext()) {
 	        Bag bag = iter.next();
 		    if(letters.get(0).getRectangle().overlaps(bag.getRectangle())) {
-	            dropSound.play();
+	            //dropSound.play();
 	            int counter = bag.getSize();
 	            bag.setSize(counter++);
 	            bag.upgrade();
 	            letters.get(0).getTexture().dispose();
 	         }
 	    }
-	    
-	    stateTime += Gdx.graphics.getDeltaTime();        
-        currentFrame = escalatorAnimation.getKeyFrame(stateTime, true);
         
 	    batch.begin();
-	    //batch.draw(currentFrame, 50, 50);
+        if(escalatorMoveTime < 500){
+    	    stateTime += Gdx.graphics.getDeltaTime();       
+            currentFrame = escalatorAnimation.getKeyFrame(stateTime, true);
+        	escalatorMoveTime += Gdx.graphics.getDeltaTime() * 500;
+        }
+	    batch.draw(currentFrame, 0, 280);
 	    batch.draw(letters.get(0).getTexture(), letters.get(0).getX(), letters.get(0).getY());
 	    for(Bag bag: bags) {
 	       batch.draw(bag.getTexture(), bag.getX(), bag.getRectangle().y);
@@ -135,8 +138,9 @@ public class Glow implements ApplicationListener {
 	}
 	
 	private void newBag(){
-	    if(TimeUtils.millis() - lastBagTime > 10000){
+	    if(TimeUtils.millis() - lastBagTime > 15000){
 	    	spawnBag();
+	    	escalatorMoveTime = 0;
 	    	for(int i = 0; i<bags.size(); i++){
 	    		bags.get(i).setPosition(i);
 	    	}
