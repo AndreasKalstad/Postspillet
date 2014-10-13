@@ -8,7 +8,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -32,8 +34,8 @@ public class Glow implements ApplicationListener {
 	private TextureRegion[] escalatorRegion;
 	private TextureRegion escalatorFrame;
 	private float escalatorStateTime;
-	private static final int FRAME_COLS_ESCALATOR = 1;
-	private static final int FRAME_ROWS_ESCALATOR = 20;
+	private static final int FRAME_COLS_ESCALATOR = 2;
+	private static final int FRAME_ROWS_ESCALATOR = 10;
 	private float escalatorMoveTime = 0;
 	private Stage stage;
 	private DragAndDrop dragAndDrop;
@@ -41,6 +43,16 @@ public class Glow implements ApplicationListener {
 	private float deltaTime;
 	private BagActor bagActor;
 	private User user;
+	private Texture backgroundTexture;
+	private Sprite backgroundSprite;
+	private Animation bagAnimation;
+	private Texture bagTexture;
+	private TextureRegion[] bagRegion;
+	private TextureRegion bagFrame;
+	private float bagStateTime;
+	private static final int FRAME_COLS_BAG = 2;
+	private static final int FRAME_ROWS_BAG = 10;
+	private float bagMoveTime = 0;
 
 	@Override
 	public void create() {
@@ -52,12 +64,18 @@ public class Glow implements ApplicationListener {
 		camera.setToOrtho(false, 800, 480);
 
 		batch = new SpriteBatch();
+		
+		backgroundTexture = new Texture(Gdx.files.internal("Bakgrunn.png"));
+		backgroundTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+	    TextureRegion region =
+	    new TextureRegion(backgroundTexture, 0, 0, 800, 480);
+	    backgroundSprite = new Sprite(region);
 
 		bagValues = new int[] {0, 100, 200, 300, 400, 500};
 		bags = new ArrayList<BagActor>(6);
 
 		//Escalator animation
-		escalator = new Texture(Gdx.files.internal("MiniEscalator_005.png"));
+		escalator = new Texture(Gdx.files.internal("Escalator_004.png"));
 
 		TextureRegion[][] tmp = TextureRegion.split(escalator, escalator.getWidth() / FRAME_COLS_ESCALATOR, escalator.getHeight() / FRAME_ROWS_ESCALATOR);
 		escalatorRegion = new TextureRegion[FRAME_COLS_ESCALATOR * FRAME_ROWS_ESCALATOR];
@@ -70,6 +88,21 @@ public class Glow implements ApplicationListener {
 
 		escalatorAnimation = new Animation(0.1f, escalatorRegion);
 		escalatorStateTime = 0f;
+		
+		//bagdrop animation
+		bagTexture = new Texture(Gdx.files.internal("Escalator_004.png"));
+
+		TextureRegion[][] trb = TextureRegion.split(bagTexture, bagTexture.getWidth() / FRAME_COLS_BAG, bagTexture.getHeight() / FRAME_ROWS_BAG);
+		bagRegion = new TextureRegion[FRAME_COLS_BAG * FRAME_ROWS_BAG];
+		int counter = 0;
+		for (int i = 0; i < FRAME_ROWS_BAG; i++) {
+			for (int j = 0; j < FRAME_COLS_BAG; j++) {
+				bagRegion[counter++] = trb[i][j];
+			}
+		}
+
+		bagAnimation = new Animation(0.1f, bagRegion);
+		bagStateTime = 0f;
 		
 		stage = new Stage();
 		Gdx.input.setInputProcessor(stage);
@@ -85,7 +118,7 @@ public class Glow implements ApplicationListener {
 
 	@Override
 	public void render() {
-		Gdx.gl.glClearColor(0.4f, 0.2f, 0.2f, 1);
+		Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 		camera.update();
 		
@@ -96,7 +129,8 @@ public class Glow implements ApplicationListener {
 			escalatorMoveTime += deltaTime * 500;
 		}
 		batch.begin();
-		batch.draw(escalatorFrame, 0, 280); 
+		backgroundSprite.draw(batch);
+		batch.draw(escalatorFrame, -2, 280); 
 		batch.end();
 		
 		stage.act(deltaTime);
