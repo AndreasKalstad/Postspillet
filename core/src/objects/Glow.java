@@ -137,6 +137,7 @@ public class Glow implements ApplicationListener {
 			escalatorMoveTime += deltaTime * 500;
 		}
 		
+		// Get baganimation frame + set speed and length of animation
 		bagFrame = bagAnimation.getKeyFrame(bagStateTime, true);
 		if(bagStateTime < bagAnimation.getAnimationDuration()){
 			bagStateTime += deltaTime;
@@ -146,6 +147,7 @@ public class Glow implements ApplicationListener {
 		backgroundSprite.draw(batch);
 		batch.draw(escalatorFrame, -2, 280);
 		//if(bagDrop){
+		// Draw bag animation
 		batch.draw(bagFrame, escalatorFrame.getRegionWidth()-(bagFrame.getRegionWidth()/2.4f), 220);
 		//}
 		batch.end();
