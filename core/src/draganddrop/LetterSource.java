@@ -2,6 +2,7 @@ package draganddrop;
 
 import actors.LetterActor;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -18,7 +19,7 @@ public class LetterSource extends Source {
 	public LetterSource(LetterActor actor) {
 		super(actor);
 		this.actor = actor;
-		actor.setBounds(50, 125, 50, 50);
+		actor.setBounds(50, 125, Gdx.graphics.getWidth()/6.4f, Gdx.graphics.getHeight()/6.4f);
 	}
 
 	@Override
@@ -34,7 +35,7 @@ public class LetterSource extends Source {
 	public void dragStop(InputEvent event, float x, float y,int pointer, DragAndDrop.Payload payload,DragAndDrop.Target target) {
 		if (target == null) {
 			if(event.getStageY() > 280){
-				actor.setBounds(this.x, this.y, 100, 100);
+				actor.setBounds(this.x, this.y, 100, 75);
 			}
 			Stage stage = actor.getStage();
 			stage.addActor(actor);

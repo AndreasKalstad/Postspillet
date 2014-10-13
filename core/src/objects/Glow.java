@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import actors.BagActor;
 import actors.LetterActor;
 import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -17,6 +18,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
+
 import draganddrop.BagTarget;
 import draganddrop.LetterSource;
 import user.User;
@@ -53,6 +56,8 @@ public class Glow implements ApplicationListener {
 	private static final int FRAME_COLS_BAG = 8;
 	private static final int FRAME_ROWS_BAG = 3;
 	private boolean bagDrop = false;
+	public float screen_width;
+    public float screen_height;
 
 	@Override
 	public void create() {
@@ -104,7 +109,10 @@ public class Glow implements ApplicationListener {
 		bagStateTime = 0f;
 		bagAnimation.setPlayMode(Animation.PlayMode.NORMAL);
 		
-		stage = new Stage();
+		screen_width = Gdx.graphics.getWidth();
+	    screen_height = Gdx.graphics.getHeight();
+		
+		stage = new Stage(new StretchViewport(screen_width, screen_height));
 		Gdx.input.setInputProcessor(stage);
 
 		dragAndDrop = new DragAndDrop();
