@@ -1,9 +1,10 @@
 package com.glow.client;
 
+import objects.Glow;
+
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
-import com.glow.Glow;
 
 public class HtmlLauncher extends GwtApplication {
    @Override

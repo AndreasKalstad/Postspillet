@@ -1,11 +1,12 @@
 package com.glow;
 
+import objects.Glow;
+
 import org.robovm.apple.foundation.NSAutoreleasePool;
 import org.robovm.apple.uikit.UIApplication;
 
 import com.badlogic.gdx.backends.iosrobovm.IOSApplication;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplicationConfiguration;
-import com.glow.Glow;
 
 public class IOSLauncher extends IOSApplication.Delegate {
     @Override

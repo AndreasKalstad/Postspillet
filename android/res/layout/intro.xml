@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="horizontal" >
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/options"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/startgame"
+        android:layout_centerHorizontal="true"
+        android:text="Options" />
+
+    <Button
+        android:id="@+id/credit" 
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/options"
+        android:layout_centerHorizontal="true"
+        android:text="Credit" />
+
+    <Button
+        android:id="@+id/exitgame"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/credit"
+        android:layout_centerHorizontal="true"
+        android:text="Exit game" />
+
+    <Button
+        android:id="@+id/startgame"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/exitgame"
+        android:layout_alignParentTop="true"
+        android:text="Start game" />
+
+</RelativeLayout>

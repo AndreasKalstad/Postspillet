@@ -1,8 +1,9 @@
 package com.glow.desktop;
 
+import objects.Glow;
+
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.glow.Glow;
 
 public class DesktopLauncher {
    public static void main(String[] args) {
