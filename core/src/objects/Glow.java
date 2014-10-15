@@ -58,6 +58,7 @@ public class Glow implements ApplicationListener {
 	private boolean bagDrop = false;
 	public float screen_width;
     public float screen_height;
+	private Texture bagDisposal;
 
 	@Override
 	public void create() {
@@ -74,6 +75,8 @@ public class Glow implements ApplicationListener {
 		backgroundTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 	    TextureRegion region = new TextureRegion(backgroundTexture, 0, 0, 800, 480);
 	    backgroundSprite = new Sprite(region);
+	    
+	    bagDisposal = new Texture(Gdx.files.internal("BagDisposal.png"));
 
 		bagValues = new int[] {0, 100, 200, 300, 400, 500};
 		bags = new ArrayList<BagActor>(6);
@@ -149,8 +152,8 @@ public class Glow implements ApplicationListener {
 		//if(bagDrop){
 		// Draw bag animation
 		batch.draw(bagFrame, escalatorFrame.getRegionWidth()-(bagFrame.getRegionWidth()/1.38f), 260);
-		// Draw BagDisposal og EscalatorFront her ??
 		//}
+		batch.draw(bagDisposal, 0, 0);
 		batch.end();
 		
 		stage.act(deltaTime);
