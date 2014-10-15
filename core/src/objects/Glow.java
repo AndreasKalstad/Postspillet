@@ -53,8 +53,8 @@ public class Glow implements ApplicationListener {
 	private TextureRegion[] bagRegion;
 	private TextureRegion bagFrame;
 	private float bagStateTime;
-	private static final int FRAME_COLS_BAG = 8;
-	private static final int FRAME_ROWS_BAG = 3;
+	private static final int FRAME_COLS_BAG = 5;
+	private static final int FRAME_ROWS_BAG = 6;
 	private boolean bagDrop = false;
 	public float screen_width;
     public float screen_height;
@@ -70,7 +70,7 @@ public class Glow implements ApplicationListener {
 
 		batch = new SpriteBatch();
 		
-		backgroundTexture = new Texture(Gdx.files.internal("Bakgrunn.png"));
+		backgroundTexture = new Texture(Gdx.files.internal("Bakgrunn2.png"));
 		backgroundTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 	    TextureRegion region = new TextureRegion(backgroundTexture, 0, 0, 800, 480);
 	    backgroundSprite = new Sprite(region);
@@ -94,7 +94,7 @@ public class Glow implements ApplicationListener {
 		escalatorStateTime = 0f;
 		
 		//Bagdrop animation
-		bagTexture = new Texture(Gdx.files.internal("BagDrop001.png"));
+		bagTexture = new Texture(Gdx.files.internal("Bag/BagDrop004_noMatte.png"));
 
 		TextureRegion[][] trb = TextureRegion.split(bagTexture, bagTexture.getWidth() / FRAME_COLS_BAG, bagTexture.getHeight() / FRAME_ROWS_BAG);
 		bagRegion = new TextureRegion[FRAME_COLS_BAG * FRAME_ROWS_BAG];
@@ -148,7 +148,8 @@ public class Glow implements ApplicationListener {
 		batch.draw(escalatorFrame, -2, 280);
 		//if(bagDrop){
 		// Draw bag animation
-		batch.draw(bagFrame, escalatorFrame.getRegionWidth()-(bagFrame.getRegionWidth()/2.4f), 220);
+		batch.draw(bagFrame, escalatorFrame.getRegionWidth()-(bagFrame.getRegionWidth()/1.38f), 260);
+		// Draw BagDisposal og EscalatorFront her ??
 		//}
 		batch.end();
 		

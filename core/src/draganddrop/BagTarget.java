@@ -15,7 +15,7 @@ public class BagTarget extends Target {
     public BagTarget(BagActor actor) {
         super(actor);
         this.actor = actor;
-        actor.setBounds(-100, 370, 50, 50);
+        actor.setBounds(-100, 320,100,100); // Må få størrelsen på bag sprite her. Eventuelt få alle sprites til å være samme størrelse.
     }
 
     @Override

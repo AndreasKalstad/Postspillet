@@ -15,10 +15,14 @@ public class Country {
 	
 	public Country(){
 		this.user = new User();
-		String[] norway = {"bag2.png","bag1.jpg", "droplet.png","Bag001.png"};
-		String[] sweden = {"bag1.jpg","bag2.png", "droplet.png","Bag001.png"};
-		String[] denmark = {"bag2.png","bag1.jpg", "droplet.png","Bag001.png"};
-		String[] iceland = {"bag1.jpg","bag2.png", "droplet.png","Bag001.png"};
+		String[] norway = {"Bag/Bag_st0.png","Bag/Bag_st2.png", "Bag/Bag_st3.png","Bag/Bag_st4.png"};
+		String[] sweden = {"Bag/Bag_st0.png","Bag/Bag_st2.png", "Bag/Bag_st3.png","Bag/Bag_st4.png"};
+		String[] denmark = {"Bag/Bag_st0.png","Bag/Bag_st2.png", "Bag/Bag_st3.png","Bag/Bag_st4.png"};
+		String[] iceland = {"Bag/Bag_st0.png","Bag/Bag_st2.png", "Bag/Bag_st3.png","Bag/Bag_st4.png"};
+		//----------- Old code --------------<<
+		//String[] iceland = {"bag1.jpg","bag2.png", "droplet.png","Bag001.png"};
+		// ------------------
+		
 		all = new Array<String[]>();
 		all.add(norway);
 		all.add(sweden);
