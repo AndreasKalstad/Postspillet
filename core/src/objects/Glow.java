@@ -59,6 +59,10 @@ public class Glow implements ApplicationListener {
 	public float screen_width;
     public float screen_height;
 	private Texture bagDisposal;
+	private TextureRegion[] escalatorEndRegion;
+	private Texture escalatorEnd;
+	private Animation escalatorEndAnimation;
+	private TextureRegion escalatorEndFrame;
 
 	@Override
 	public void create() {
@@ -76,9 +80,9 @@ public class Glow implements ApplicationListener {
 	    TextureRegion region = new TextureRegion(backgroundTexture, 0, 0, 800, 480);
 	    backgroundSprite = new Sprite(region);
 	    
-	    bagDisposal = new Texture(Gdx.files.internal("BagDisposal.png"));
+	    bagDisposal = new Texture(Gdx.files.internal("Bag/BagDisposal.png"));
 
-		bagValues = new int[] {0, 100, 200, 300, 400, 500};
+		bagValues = new int[] {0, 80, 160, 240, 320, 400};
 		bags = new ArrayList<BagActor>(6);
 
 		//Escalator animation
@@ -95,6 +99,20 @@ public class Glow implements ApplicationListener {
 
 		escalatorAnimation = new Animation(0.1f, escalatorRegion);
 		escalatorStateTime = 0f;
+		
+		// Escalator fix
+		escalatorEnd = new Texture(Gdx.files.internal("Escalator_Front005.png"));
+
+		TextureRegion[][] tme = TextureRegion.split(escalatorEnd, escalatorEnd.getWidth() / FRAME_COLS_ESCALATOR, escalatorEnd.getHeight() / FRAME_ROWS_ESCALATOR);
+		escalatorEndRegion = new TextureRegion[FRAME_COLS_ESCALATOR * FRAME_ROWS_ESCALATOR];
+		int in = 0;
+		for (int i = 0; i < FRAME_ROWS_ESCALATOR; i++) {
+			for (int j = 0; j < FRAME_COLS_ESCALATOR; j++) {
+				escalatorEndRegion[in++] = tme[i][j];
+			}
+		}
+
+		escalatorEndAnimation = new Animation(0.1f, escalatorEndRegion);
 		
 		//Bagdrop animation
 		bagTexture = new Texture(Gdx.files.internal("Bag/BagDrop004_noMatte.png"));
@@ -137,6 +155,7 @@ public class Glow implements ApplicationListener {
 		if (escalatorMoveTime < 500) {
 			escalatorStateTime += deltaTime;
 			escalatorFrame = escalatorAnimation.getKeyFrame(escalatorStateTime, true);
+			escalatorEndFrame = escalatorEndAnimation.getKeyFrame(escalatorStateTime, true);
 			escalatorMoveTime += deltaTime * 500;
 		}
 		
@@ -154,6 +173,7 @@ public class Glow implements ApplicationListener {
 		batch.draw(bagFrame, escalatorFrame.getRegionWidth()-(bagFrame.getRegionWidth()/1.38f), 260);
 		//}
 		batch.draw(bagDisposal, 0, 0);
+		batch.draw(escalatorEndFrame, -14, 270);
 		batch.end();
 		
 		stage.act(deltaTime);
