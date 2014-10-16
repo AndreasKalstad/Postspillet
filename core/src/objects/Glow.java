@@ -80,13 +80,13 @@ public class Glow implements ApplicationListener {
 	    TextureRegion region = new TextureRegion(backgroundTexture, 0, 0, 800, 480);
 	    backgroundSprite = new Sprite(region);
 	    
-	    bagDisposal = new Texture(Gdx.files.internal("Bag/BagDisposal.png"));
+	    bagDisposal = new Texture(Gdx.files.internal("Bag/BagDisposal002_NoCrop.png"));
 
 		bagValues = new int[] {0, 80, 160, 240, 320, 400};
 		bags = new ArrayList<BagActor>(6);
 
 		//Escalator animation
-		escalator = new Texture(Gdx.files.internal("Escalator_004.png"));
+		escalator = new Texture(Gdx.files.internal("Escalator/Escalator_Back001.png"));
 
 		TextureRegion[][] tmp = TextureRegion.split(escalator, escalator.getWidth() / FRAME_COLS_ESCALATOR, escalator.getHeight() / FRAME_ROWS_ESCALATOR);
 		escalatorRegion = new TextureRegion[FRAME_COLS_ESCALATOR * FRAME_ROWS_ESCALATOR];
@@ -101,7 +101,7 @@ public class Glow implements ApplicationListener {
 		escalatorStateTime = 0f;
 		
 		// Escalator fix
-		escalatorEnd = new Texture(Gdx.files.internal("Escalator_Front005.png"));
+		escalatorEnd = new Texture(Gdx.files.internal("Escalator/Escalator_Front001.png"));
 
 		TextureRegion[][] tme = TextureRegion.split(escalatorEnd, escalatorEnd.getWidth() / FRAME_COLS_ESCALATOR, escalatorEnd.getHeight() / FRAME_ROWS_ESCALATOR);
 		escalatorEndRegion = new TextureRegion[FRAME_COLS_ESCALATOR * FRAME_ROWS_ESCALATOR];
@@ -115,7 +115,7 @@ public class Glow implements ApplicationListener {
 		escalatorEndAnimation = new Animation(0.1f, escalatorEndRegion);
 		
 		//Bagdrop animation
-		bagTexture = new Texture(Gdx.files.internal("Bag/BagDrop004_noMatte.png"));
+		bagTexture = new Texture(Gdx.files.internal("Bag/BagDrop005.png"));
 
 		TextureRegion[][] trb = TextureRegion.split(bagTexture, bagTexture.getWidth() / FRAME_COLS_BAG, bagTexture.getHeight() / FRAME_ROWS_BAG);
 		bagRegion = new TextureRegion[FRAME_COLS_BAG * FRAME_ROWS_BAG];
@@ -170,10 +170,10 @@ public class Glow implements ApplicationListener {
 		batch.draw(escalatorFrame, -2, 280);
 		//if(bagDrop){
 		// Draw bag animation
-		batch.draw(bagFrame, escalatorFrame.getRegionWidth()-(bagFrame.getRegionWidth()/1.38f), 260);
+		batch.draw(bagFrame, escalatorFrame.getRegionWidth()-(bagFrame.getRegionWidth()/1.41f), 169);
 		//}
 		batch.draw(bagDisposal, 0, 0);
-		batch.draw(escalatorEndFrame, -14, 270);
+		batch.draw(escalatorEndFrame, -2, 280);
 		batch.end();
 		
 		stage.act(deltaTime);

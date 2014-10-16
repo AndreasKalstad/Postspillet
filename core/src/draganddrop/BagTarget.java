@@ -15,7 +15,7 @@ public class BagTarget extends Target {
         super(actor);
         this.actor = actor;
         actor.setX(-100);
-        actor.setY(290);
+        actor.setY(335);
     }
 
     @Override
