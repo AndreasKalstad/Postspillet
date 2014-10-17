@@ -61,9 +61,6 @@ public class Glow implements ApplicationListener {
 	private Texture escalatorEnd;
 	private Animation escalatorEndAnimation;
 	private TextureRegion escalatorEndFrame;
-	private float screenWidth;
-	private float screenHeight;
-	private static final float BAG_SPEED = 11.4286f;
 
 	@Override
 	public void create() {
@@ -73,9 +70,6 @@ public class Glow implements ApplicationListener {
 
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 800, 480);
-		
-		screenWidth = Gdx.graphics.getWidth();
-		screenHeight = Gdx.graphics.getHeight();
 
 		batch = new SpriteBatch();
 		
@@ -224,7 +218,7 @@ public class Glow implements ApplicationListener {
 			if (bags.size() < 7) {
 				if (bags.get(i).getX() <= bagValues[i]) {
 					float bagX = bags.get(i).getX();
-					float x = bagX += screenWidth * BAG_SPEED  * deltaTime;
+					float x = bagX += 70 * deltaTime;
 					bags.get(i).setX(x);
 				}
 			} else {
