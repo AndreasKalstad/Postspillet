@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import actors.BagActor;
 import actors.LetterActor;
 import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -55,7 +54,6 @@ public class Glow implements ApplicationListener {
 	private float bagStateTime;
 	private static final int FRAME_COLS_BAG = 5;
 	private static final int FRAME_ROWS_BAG = 6;
-	private boolean bagDrop = false;
 	public float screen_width;
     public float screen_height;
 	private Texture bagDisposal;
@@ -63,7 +61,9 @@ public class Glow implements ApplicationListener {
 	private Texture escalatorEnd;
 	private Animation escalatorEndAnimation;
 	private TextureRegion escalatorEndFrame;
-	private int BAG_ANIMATION_MARGIN = 170;
+	private float screenWidth;
+	private float screenHeight;
+	private static final float BAG_SPEED = 11.4286f;
 
 	@Override
 	public void create() {
@@ -73,6 +73,9 @@ public class Glow implements ApplicationListener {
 
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 800, 480);
+		
+		screenWidth = Gdx.graphics.getWidth();
+		screenHeight = Gdx.graphics.getHeight();
 
 		batch = new SpriteBatch();
 		
@@ -153,12 +156,15 @@ public class Glow implements ApplicationListener {
 		
 		deltaTime = Gdx.graphics.getDeltaTime();
 		if (escalatorMoveTime < escalatorAnimation.getAnimationDuration()/1.5) {
+			// Speed of escalator
 			escalatorStateTime += deltaTime*1.2;
 			escalatorFrame = escalatorAnimation.getKeyFrame(escalatorStateTime, true);
 			escalatorEndFrame = escalatorEndAnimation.getKeyFrame(escalatorStateTime, true);
+			// Duration of escalator movement
 			escalatorMoveTime += deltaTime;
 		}
 		
+		// Set scaled positions for the bags
 		if(bagValues == null){
 			double ratio = (550/6);
 			double start = 78;
@@ -167,16 +173,15 @@ public class Glow implements ApplicationListener {
 		
 		batch.begin();
 		backgroundSprite.draw(batch);
+		// Draw escalator
 		batch.draw(escalatorFrame, -2, 280);
-		//if(bagDrop){
 		// Draw bag animation
-		// Get baganimation frame + set speed and length of animation
 		if(bagStateTime < bagAnimation.getAnimationDuration()){
 			bagFrame = bagAnimation.getKeyFrame(bagStateTime, true);
+			// Bag drop animation speed
 			bagStateTime += deltaTime;
 			batch.draw(bagFrame, escalatorFrame.getRegionWidth()-(bagFrame.getRegionWidth()/1.41f), 168);
 		}
-		//}
 		batch.draw(bagDisposal, 0, 0);
 		batch.draw(escalatorEndFrame, -2, 280);
 		batch.end();
@@ -219,7 +224,7 @@ public class Glow implements ApplicationListener {
 			if (bags.size() < 7) {
 				if (bags.get(i).getX() <= bagValues[i]) {
 					float bagX = bags.get(i).getX();
-					float x = bagX += 70 * deltaTime;
+					float x = bagX += screenWidth * BAG_SPEED  * deltaTime;
 					bags.get(i).setX(x);
 				}
 			} else {

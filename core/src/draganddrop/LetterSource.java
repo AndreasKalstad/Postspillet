@@ -35,7 +35,7 @@ public class LetterSource extends Source {
 	public void dragStop(InputEvent event, float x, float y,int pointer, DragAndDrop.Payload payload,DragAndDrop.Target target) {
 		if (target == null) {
 			if(event.getStageY() > 280){
-				actor.setBounds(this.x, this.y, 100, 75);
+				actor.setBounds(this.x, this.y, Gdx.graphics.getWidth()/6.4f, Gdx.graphics.getHeight()/6.4f);
 			}
 			Stage stage = actor.getStage();
 			stage.addActor(actor);
