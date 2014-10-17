@@ -157,7 +157,7 @@ public class Glow implements ApplicationListener {
 		deltaTime = Gdx.graphics.getDeltaTime();
 		if (escalatorMoveTime < escalatorAnimation.getAnimationDuration()/1.5) {
 			// Speed of escalator
-			escalatorStateTime += deltaTime*1.2;
+			escalatorStateTime += deltaTime*2;
 			escalatorFrame = escalatorAnimation.getKeyFrame(escalatorStateTime, true);
 			escalatorEndFrame = escalatorEndAnimation.getKeyFrame(escalatorStateTime, true);
 			// Duration of escalator movement
