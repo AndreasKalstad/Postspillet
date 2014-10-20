@@ -54,15 +54,18 @@ public class Glow implements ApplicationListener {
 	private float bagStateTime;
 	private static final int FRAME_COLS_BAG = 5;
 	private static final int FRAME_ROWS_BAG = 6;
+	private static final int FRAME_COLS_BAG_SPAWN = 10;
+	private static final int FRAME_ROWS_BAG_SPAWN = 1;
 	public float screen_width;
     public float screen_height;
 	private Texture bagDisposal;
-	private TextureRegion[] escalatorEndRegion;
-	private Texture escalatorEnd;
-	private Animation escalatorEndAnimation;
-	private TextureRegion escalatorEndFrame;
 	private float screenWidth;
 	private float screenHeight;
+	private Texture BagSpawn;
+	private TextureRegion[] bagSpawnRegion;
+	private Animation bagSpawnAnimation;
+	private float bagSpawnStateTime;
+	private TextureRegion bagSpawnFrame;
 	private static final float BAG_SPEED = 10f;
 
 	@Override
@@ -79,7 +82,7 @@ public class Glow implements ApplicationListener {
 
 		batch = new SpriteBatch();
 		
-		backgroundTexture = new Texture(Gdx.files.internal("Bakgrunn2.png"));
+		backgroundTexture = new Texture(Gdx.files.internal("background/Bakgrunn3.png"));
 		backgroundTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 	    TextureRegion region = new TextureRegion(backgroundTexture, 0, 0, 800, 480);
 	    backgroundSprite = new Sprite(region);
@@ -88,8 +91,8 @@ public class Glow implements ApplicationListener {
 
 		bags = new ArrayList<BagActor>(6);
 
-		//Escalator animation
-		escalator = new Texture(Gdx.files.internal("Escalator/Escalator_Back003.png"));
+		//Escalator back animation
+		escalator = new Texture(Gdx.files.internal("Escalator/Escalator008.png"));
 
 		TextureRegion[][] tmp = TextureRegion.split(escalator, escalator.getWidth() / FRAME_COLS_ESCALATOR, escalator.getHeight() / FRAME_ROWS_ESCALATOR);
 		escalatorRegion = new TextureRegion[FRAME_COLS_ESCALATOR * FRAME_ROWS_ESCALATOR];
@@ -103,35 +106,20 @@ public class Glow implements ApplicationListener {
 		escalatorAnimation = new Animation(0.1f, escalatorRegion);
 		escalatorStateTime = 0f;
 		
-		// Escalator fix
-		escalatorEnd = new Texture(Gdx.files.internal("Escalator/Escalator_Front003.png"));
+		//Escalator back animation
+		BagSpawn = new Texture(Gdx.files.internal("bagSpawn/BagSpawn.png"));
 
-		TextureRegion[][] tme = TextureRegion.split(escalatorEnd, escalatorEnd.getWidth() / FRAME_COLS_ESCALATOR, escalatorEnd.getHeight() / FRAME_ROWS_ESCALATOR);
-		escalatorEndRegion = new TextureRegion[FRAME_COLS_ESCALATOR * FRAME_ROWS_ESCALATOR];
+		TextureRegion[][] bs = TextureRegion.split(BagSpawn, BagSpawn.getWidth() / FRAME_COLS_BAG_SPAWN, BagSpawn.getHeight() / FRAME_ROWS_BAG_SPAWN);
+		bagSpawnRegion = new TextureRegion[FRAME_COLS_BAG_SPAWN * FRAME_ROWS_BAG_SPAWN];
 		int in = 0;
-		for (int i = 0; i < FRAME_ROWS_ESCALATOR; i++) {
-			for (int j = 0; j < FRAME_COLS_ESCALATOR; j++) {
-				escalatorEndRegion[in++] = tme[i][j];
+		for (int i = 0; i < FRAME_ROWS_BAG_SPAWN; i++) {
+			for (int j = 0; j < FRAME_COLS_BAG_SPAWN; j++) {
+				bagSpawnRegion[in++] = bs[i][j];
 			}
 		}
 
-		escalatorEndAnimation = new Animation(0.1f, escalatorEndRegion);
-		
-		//Bagdrop animation
-		bagTexture = new Texture(Gdx.files.internal("Bag/BagDrop006.png"));
-
-		TextureRegion[][] trb = TextureRegion.split(bagTexture, bagTexture.getWidth() / FRAME_COLS_BAG, bagTexture.getHeight() / FRAME_ROWS_BAG);
-		bagRegion = new TextureRegion[FRAME_COLS_BAG * FRAME_ROWS_BAG];
-		int counter = 0;
-		for (int i = 0; i < FRAME_ROWS_BAG; i++) {
-			for (int j = 0; j < FRAME_COLS_BAG; j++) {
-				bagRegion[counter++] = trb[i][j];
-			}
-		}
-
-		bagAnimation = new Animation(0.1f, bagRegion);
-		bagStateTime = 0f;
-		bagAnimation.setPlayMode(Animation.PlayMode.NORMAL);
+		bagSpawnAnimation = new Animation(0.1f, bagSpawnRegion);
+		bagSpawnStateTime = 0f;
 		
 		screen_width = Gdx.graphics.getWidth();
 	    screen_height = Gdx.graphics.getHeight();
@@ -159,9 +147,14 @@ public class Glow implements ApplicationListener {
 			// Speed of escalator
 			escalatorStateTime += deltaTime*2.9;
 			escalatorFrame = escalatorAnimation.getKeyFrame(escalatorStateTime, true);
-			escalatorEndFrame = escalatorEndAnimation.getKeyFrame(escalatorStateTime, true);
 			// Duration of escalator movement
 			escalatorMoveTime += deltaTime*2;
+		}
+		
+		if (bagSpawnStateTime < bagSpawnAnimation.getAnimationDuration()) {
+			// Speed of escalator
+			bagSpawnStateTime += deltaTime;
+			bagSpawnFrame = bagSpawnAnimation.getKeyFrame(bagSpawnStateTime, false);
 		}
 		
 		// Set scaled positions for the bags
@@ -174,16 +167,8 @@ public class Glow implements ApplicationListener {
 		batch.begin();
 		backgroundSprite.draw(batch);
 		// Draw escalator
-		batch.draw(escalatorFrame, -2, 280);
-		// Draw bag animation
-		if(bagStateTime < bagAnimation.getAnimationDuration()){
-			bagFrame = bagAnimation.getKeyFrame(bagStateTime, true);
-			// Bag drop animation speed
-			bagStateTime += deltaTime*2;
-			batch.draw(bagFrame, escalatorFrame.getRegionWidth()-(bagFrame.getRegionWidth()/1.41f), 168);
-		}
-		batch.draw(bagDisposal, 0, 0);
-		batch.draw(escalatorEndFrame, -2, 280);
+		batch.draw(escalatorFrame, 0, screen_height/11);
+		batch.draw(bagSpawnFrame, 100, Gdx.graphics.getHeight()/7);
 		batch.end();
 		
 		stage.act(deltaTime);
@@ -208,6 +193,7 @@ public class Glow implements ApplicationListener {
 	private void newBag() {
 		if (theTime - lastBagTime > 6000) {
 			spawnBag();
+			bagSpawnStateTime = 0;
 			escalatorMoveTime = 0;
 		}
 		moveBags();

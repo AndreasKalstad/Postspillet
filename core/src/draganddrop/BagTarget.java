@@ -3,6 +3,7 @@ package draganddrop;
 import objects.Bag;
 import actors.BagActor;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Payload;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Source;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Target;
@@ -15,7 +16,7 @@ public class BagTarget extends Target {
         super(actor);
         this.actor = actor;
         actor.setX(-78f);
-        actor.setY(335);
+        actor.setY(Gdx.graphics.getHeight()/6);
     }
 
     @Override
