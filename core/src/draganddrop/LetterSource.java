@@ -19,7 +19,7 @@ public class LetterSource extends Source {
 	public LetterSource(LetterActor actor) {
 		super(actor);
 		this.actor = actor;
-		actor.setBounds(50, 125, Gdx.graphics.getWidth()/6.4f, Gdx.graphics.getHeight()/6.4f);
+		actor.setBounds(150, 165, Gdx.graphics.getWidth()/6.4f, Gdx.graphics.getHeight()/6.4f);
 	}
 
 	@Override
