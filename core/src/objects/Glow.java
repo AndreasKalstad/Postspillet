@@ -181,10 +181,10 @@ public class Glow implements ApplicationListener {
 		
 		// Set scaled positions for the bags
 		if(bagValues == null){
-			double start = screenWidth/14;
-			double bagArea = screenWidth/1.2;
-			double ratio = bagArea/7;
-			bagValues = new double[] {ratio*2-start, ratio*3-start, ratio*4-start, ratio*5-start, ratio*6-start};
+			double start = bagSpawnFrame.getRegionWidth()/4;
+			double bagArea = screenWidth-bagSpawnFrame.getRegionWidth();
+			double ratio = bagArea/6;
+			bagValues = new double[] {ratio*2-start, ratio*3-start, ratio*4-start, ratio*5-start, ratio*6-start, ratio*7-start};
 		}
 		
 		batch.begin();
@@ -271,7 +271,7 @@ public class Glow implements ApplicationListener {
 
 	private void spawnBag() {
 		Bag bag = new Bag();
-        bagActor = new BagActor(bag, stage);
+        bagActor = new BagActor(bag, stage,(bagSpawnFrame.getRegionWidth()/4));
 		bags.add(0, bagActor);
 	} 
 	

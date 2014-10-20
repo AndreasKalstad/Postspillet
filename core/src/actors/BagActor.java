@@ -11,14 +11,20 @@ import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 public class BagActor extends Image{
 
 	private Bag bag;
+	private int startX;
 	
-    public BagActor(Bag bag, Stage stage) {
+    public BagActor(Bag bag, Stage stage, int startX) {
     	super(new SpriteDrawable(new Sprite(bag.getTexture())));
     	this.bag = bag;
+    	this.startX = startX;
     }
     
     public Bag getBag(){
     	return bag;
+    }
+    
+    public int getStartX(){
+    	return startX;
     }
     
     @Override
