@@ -86,7 +86,7 @@ public class Glow implements ApplicationListener {
 		
 		backgroundTexture = new Texture(Gdx.files.internal("NewG/Bakgrunn4.png"));
 		backgroundTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-	    TextureRegion region = new TextureRegion(backgroundTexture, 0, 0, 800, 480);
+	    TextureRegion region = new TextureRegion(backgroundTexture, 0, 0, screenWidth, screenHeight);
 	    backgroundSprite = new Sprite(region);
 
 		bags = new ArrayList<BagActor>(6);
@@ -176,15 +176,15 @@ public class Glow implements ApplicationListener {
 			escalatorStateTime += deltaTime*2.9;
 			escalatorFrame = escalatorAnimation.getKeyFrame(escalatorStateTime, true);
 			// Duration of escalator movement
-			escalatorMoveTime += deltaTime*2;
+			escalatorMoveTime += deltaTime*1.8;
 		}
 		
 		// Set scaled positions for the bags
 		if(bagValues == null){
-			double start = bagSpawnFrame.getRegionWidth()/4;
-			double bagArea = screenWidth-bagSpawnFrame.getRegionWidth();
-			double ratio = bagArea/6;
-			bagValues = new double[] {ratio*2-start, ratio*3-start, ratio*4-start, ratio*5-start, ratio*6-start, ratio*7-start};
+			double start = bagSpawnFrame.getRegionWidth()/3;
+			double bagArea = screenWidth-bagSpawnFrame.getRegionWidth()/3-bagDestroyFrame.getRegionWidth()/3;
+			double ratio = bagArea/7;
+			bagValues = new double[] {ratio+start, ratio*2+start, ratio*3+start, ratio*4+start, ratio*5+start, ratio*6+start, ratio*7+start};
 		}
 		
 		batch.begin();
@@ -245,7 +245,7 @@ public class Glow implements ApplicationListener {
 
 	private void moveBags() {
 		for (int i = 1; i < bags.size(); i++) {
-			if (bags.size() < 7) {
+			if (bags.size() < 8) {
 				if (bags.get(i).getX() <= bagValues[i-1]) {
 					float bagX = bags.get(i).getX();
 					float x = bagX += screenWidth / BAG_SPEED * deltaTime;
@@ -254,8 +254,8 @@ public class Glow implements ApplicationListener {
 			} else {
 				bagDestroyStateTime = 0f;
 				bagDestroyMoveTime = 0;
-				bags.get(6).remove();
-				bags.remove(6);
+				bags.get(7).remove();
+				bags.remove(7);
 			}
 		}
 	}
@@ -271,7 +271,7 @@ public class Glow implements ApplicationListener {
 
 	private void spawnBag() {
 		Bag bag = new Bag();
-        bagActor = new BagActor(bag, stage,(bagSpawnFrame.getRegionWidth()/4));
+        bagActor = new BagActor(bag, stage,bagSpawnFrame.getRegionWidth()/3);
 		bags.add(0, bagActor);
 	} 
 	
