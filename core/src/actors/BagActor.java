@@ -14,7 +14,7 @@ public class BagActor extends Image{
 	private int startX;
 	
     public BagActor(Bag bag, Stage stage, int startX) {
-    	super(new SpriteDrawable(new Sprite(bag.getTexture())));
+    	super(new SpriteDrawable(new Sprite(bag.getTextureRegion())));
     	this.bag = bag;
     	this.startX = startX;
     }
@@ -29,6 +29,6 @@ public class BagActor extends Image{
     
     @Override
     public void act(float delta){
-    	this.setDrawable(new SpriteDrawable(new Sprite(bag.getTexture())));
+    	this.setDrawable(new SpriteDrawable(new Sprite(bag.getTextureRegion())));
     }
 }
