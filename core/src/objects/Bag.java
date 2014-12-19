@@ -1,12 +1,12 @@
 package objects;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Bag {
 
 	private String countryString;
 	private int level;
-	private Texture texture;
+	private TextureRegion texture;
 	private Country country;
 	
     public Bag() {
@@ -23,15 +23,15 @@ public class Bag {
 		this.level = level;
 	}
 
-	public void setTexture(Texture texture) {
-		this.texture = texture;
+	public void setTextureRegion(TextureRegion textureRegion) {
+		this.texture = textureRegion;
 	}
 
 	public String getCountry() {
     	return countryString;
     }
     
-    public Texture getTexture(){
+    public TextureRegion getTextureRegion(){
     	return texture;
     }
     

@@ -5,17 +5,25 @@ import user.User;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 
 public class Country {
 	
-	private String[] countries = {"norway","sweden", "denmark"};
-	private Array<String[]> all;
+	private String[] countries = {"norway"};
+	private Array<TextureRegion[]> all;
 	private User user;
+	private static final int FRAME_COLS_BAG_SPAWN = 4;
+	private static final int FRAME_ROWS_BAG_SPAWN = 1;
 	
 	public Country(){
 		this.user = new User();
-		String[] norway = {"Bag/Bag001.png","Bag/Bag002.png", "Bag/Bag003.png","Bag/Bag004.png"};
+		
+		TextureRegion[] norway = makeTextures("Bag/bagSpriteNorway.png");
+		all = new Array<TextureRegion[]>();
+		all.add(norway);
+		
+/*		String[] norway = {"Bag/Bag001.png","Bag/Bag002.png", "Bag/Bag003.png","Bag/Bag004.png"};
 		String[] sweden = {"Bag/Bag001.png","Bag/Bag002.png", "Bag/Bag003.png","Bag/Bag004.png"};
 		String[] denmark = {"Bag/Bag001.png","Bag/Bag002.png", "Bag/Bag003.png","Bag/Bag004.png"};
 		String[] iceland = {"Bag/Bag001.png","Bag/Bag002.png", "Bag/Bag003.png","Bag/Bag004.png"};
@@ -27,14 +35,14 @@ public class Country {
 		all.add(norway);
 		all.add(sweden);
 		all.add(denmark);
-		all.add(iceland);
+		all.add(iceland); */
 	}
 	
     public void giveCountry(Bag bag){
     	Random ran = new Random();
     	int ranInt = ran.nextInt(user.getRange());
     	bag.setCountry(countries[ranInt]);
-    	bag.setTexture(new Texture(Gdx.files.internal(all.get(ranInt)[bag.getLevel()])));
+    	bag.setTextureRegion(all.get(0)[0]);
     }
     
     public void updateLevel(Bag bag){
@@ -45,7 +53,21 @@ public class Country {
     		}
     	}
     	if(bag.getLevel() < 4){
-    		bag.setTexture(new Texture(Gdx.files.internal(all.get(index)[bag.getLevel()])));
+    		bag.setTextureRegion(all.get(index)[bag.getLevel()]);
     	}
+    }
+    
+    private TextureRegion[] makeTextures(String path){
+    	Texture BagSpawn = new Texture(Gdx.files.internal(path));
+
+		TextureRegion[][] bs = TextureRegion.split(BagSpawn, BagSpawn.getWidth() / FRAME_COLS_BAG_SPAWN, BagSpawn.getHeight() / FRAME_ROWS_BAG_SPAWN);
+		TextureRegion[] bagSpawnRegion = new TextureRegion[FRAME_COLS_BAG_SPAWN * FRAME_ROWS_BAG_SPAWN];
+		int in = 0;
+		for (int i = 0; i < FRAME_ROWS_BAG_SPAWN; i++) {
+			for (int j = 0; j < FRAME_COLS_BAG_SPAWN; j++) {
+				bagSpawnRegion[in++] = bs[i][j];
+			}
+		}
+		return bagSpawnRegion;
     }
 }

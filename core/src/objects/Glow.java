@@ -141,7 +141,7 @@ public class Glow implements ApplicationListener {
 		Gdx.input.setInputProcessor(stage);
 
 		dragAndDrop = new DragAndDrop();
-		dragAndDrop.setDragActorPosition(-(25), 25);
+		dragAndDrop.setDragActorPosition(-(Gdx.graphics.getWidth()/6.4f)/2, (Gdx.graphics.getHeight()/6.4f)/2);
 	}
 
 	@Override
@@ -170,7 +170,7 @@ public class Glow implements ApplicationListener {
 			bagDestroyStateTime += deltaTime;
 			bagDestroyFrame = bagDestroyAnimation.getKeyFrame(bagDestroyStateTime, false);
 			bagDestroyMoveTime += deltaTime;
-		} 
+		}
 		
 		if (escalatorMoveTime < escalatorAnimation.getAnimationDuration()/1.8) {
 			escalatorFrame = escalatorAnimation.getKeyFrame(escalatorStateTime, true);

@@ -3,7 +3,7 @@ package user;
 public class User {
 	private int points;
 	private int level;
-	private int[] range = {3,6,9,12};
+	private int[] range = {1};
 	
 	public User(){
 		points = 0;
