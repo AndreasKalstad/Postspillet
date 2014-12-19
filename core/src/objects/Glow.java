@@ -69,6 +69,7 @@ public class Glow implements ApplicationListener {
 	private boolean spawnBag;
 	private boolean escalatorMoved;
 	private static final float BAG_SPEED = 10f;
+	private boolean destroyBag = true;
 
 	@Override
 	public void create() {
@@ -86,7 +87,7 @@ public class Glow implements ApplicationListener {
 		
 		backgroundTexture = new Texture(Gdx.files.internal("NewG/Bakgrunn4.png"));
 		backgroundTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-	    TextureRegion region = new TextureRegion(backgroundTexture, 0, 0, screenWidth, screenHeight);
+	    TextureRegion region = new TextureRegion(backgroundTexture, 0, 0, (int) screenWidth, (int) screenHeight); 
 	    backgroundSprite = new Sprite(region);
 
 		bags = new ArrayList<BagActor>(6);
@@ -172,9 +173,11 @@ public class Glow implements ApplicationListener {
 		} 
 		
 		if (escalatorMoveTime < escalatorAnimation.getAnimationDuration()/1.8) {
-			// Speed of escalator
-			escalatorStateTime += deltaTime*2.9;
 			escalatorFrame = escalatorAnimation.getKeyFrame(escalatorStateTime, true);
+			if(bags.size() > 1){
+				// Speed of escalator
+				escalatorStateTime += deltaTime*2.9;
+			}
 			// Duration of escalator movement
 			escalatorMoveTime += deltaTime*1.8;
 		}
@@ -218,18 +221,20 @@ public class Glow implements ApplicationListener {
 	}
 
 	private void newBag() {
-		if (theTime - lastBagTime > 6000) {
+		if (theTime - lastBagTime > 4000) {
 			escalatorMoved = true;
 			spawnBag = true;
 			lastBagTime = theTime;
 			escalatorMoveTime = 0f;
 			spawnBag();
 		}
-		if (escalatorMoveTime > escalatorAnimation.getAnimationDuration()/1.8 && escalatorMoved == true) {
+		
+		if (escalatorMoveTime > escalatorAnimation.getAnimationDuration()/1.8 && escalatorMoved == true) { 
 			escalatorMoved = false;
 			bagSpawnStateTime = 0f;
 			bagSpawnMoveTime = 0f;
 		}
+		
 		if(bagSpawnAnimation.getKeyFrameIndex(bagSpawnStateTime) == 12 && spawnBag == true){
 			addBagStage();
 			spawnBag = false;
@@ -238,7 +243,7 @@ public class Glow implements ApplicationListener {
 	}
 
 	private void newLetters() {
-		if (theTime - lastLetterTime > 5000) {
+		if (theTime - lastLetterTime > 3000) {
 			spawnLetters();
 		}
 	}
@@ -251,12 +256,23 @@ public class Glow implements ApplicationListener {
 					float x = bagX += screenWidth / BAG_SPEED * deltaTime;
 					bags.get(i).setX(x);
 				}
-			} else {
-				bagDestroyStateTime = 0f;
-				bagDestroyMoveTime = 0;
-				bags.get(7).remove();
-				bags.remove(7);
 			}
+			if(bags.size() == 7){
+				if(destroyBag && escalatorMoveTime >= escalatorAnimation.getAnimationDuration()/1.8){
+					bagDestroyStateTime = 0f;
+					bagDestroyMoveTime = 0;
+					destroyBag = false;
+				}
+				destroyBag();
+			}
+		}
+	}
+	
+	private void destroyBag(){
+		if(bagDestroyAnimation.getKeyFrameIndex(bagDestroyStateTime) == 12){
+			bags.get(6).remove();
+			bags.remove(6);
+			destroyBag = true;
 		}
 	}
 
