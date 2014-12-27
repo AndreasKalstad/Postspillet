@@ -1,5 +1,7 @@
 package draganddrop;
 
+import user.User;
+import actors.BagActor;
 import actors.LetterActor;
 
 import com.badlogic.gdx.Gdx;
@@ -13,13 +15,15 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Source;
 public class LetterSource extends Source {
 	
 	private Actor actor;
+	private User user;
 	private float x;
 	private float y;
 	
-	public LetterSource(LetterActor actor) {
+	public LetterSource(LetterActor actor, User user) {
 		super(actor);
 		this.actor = actor;
 		actor.setBounds(150, 165, Gdx.graphics.getWidth()/6.4f, Gdx.graphics.getHeight()/6.4f);
+		this.user = user;
 	}
 
 	@Override
@@ -39,6 +43,20 @@ public class LetterSource extends Source {
 			}
 			Stage stage = actor.getStage();
 			stage.addActor(actor);
+		} else {
+			BagActor bagActor = (BagActor) target.getActor();
+			LetterActor letterActor = (LetterActor) payload.getDragActor();
+			if(bagActor.getBag().getCountry().equals(letterActor.getLetter().getNationality())){
+				user.increasePoints();
+			} else {
+				resetLetter();
+			}
 		}
+	}
+	
+	private void resetLetter(){
+		actor.setBounds(this.x, this.y, Gdx.graphics.getWidth()/6.4f, Gdx.graphics.getHeight()/6.4f);
+		Stage stage = actor.getStage();
+		stage.addActor(actor);
 	}
 }

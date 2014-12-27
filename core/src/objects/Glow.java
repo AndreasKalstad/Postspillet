@@ -5,16 +5,21 @@ import actors.BagActor;
 import actors.LetterActor;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -28,10 +33,16 @@ public class Glow implements ApplicationListener {
 	private Array<LetterActor> letters;
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
+	private Stage stage;
+	private DragAndDrop dragAndDrop;
+	
 	private ArrayList<BagActor> bags;
+	private double[] bagValues;
+	private BagActor bagActor;
+	
 	private long lastBagTime;
 	private long lastLetterTime;
-	private double[] bagValues;
+	
 	private Animation escalatorAnimation;
 	private Texture escalator;
 	private TextureRegion[] escalatorRegion;
@@ -40,42 +51,67 @@ public class Glow implements ApplicationListener {
 	private static final int FRAME_COLS_ESCALATOR = 2;
 	private static final int FRAME_ROWS_ESCALATOR = 20;
 	private float escalatorMoveTime = 0f;
-	private Stage stage;
-	private DragAndDrop dragAndDrop;
+	private boolean escalatorMoved;
+	
 	private long theTime;
 	private float deltaTime;
-	private BagActor bagActor;
+	
 	private User user;
+	
 	private Texture backgroundTexture;
 	private Sprite backgroundSprite;
-	private static final int FRAME_COLS_BAG_SPAWN = 5;
-	private static final int FRAME_ROWS_BAG_SPAWN = 5;
-	public float screen_width;
-    public float screen_height;
-	private float screenWidth;
-	private float screenHeight;
+	
+	private boolean spawnBag;
 	private Texture BagSpawn;
 	private TextureRegion[] bagSpawnRegion;
 	private Animation bagSpawnAnimation;
 	private float bagSpawnStateTime = 0f;
 	private TextureRegion bagSpawnFrame;
 	private float bagSpawnMoveTime = 0f;
+	private static final int FRAME_COLS_BAG_SPAWN = 10;
+	private static final int FRAME_ROWS_BAG_SPAWN = 5;
+	private static final float BAG_SPEED = 10f;
+	
+	private static final int FRAME_COLS_BAG_PICKUP = 13;
+	private static final int FRAME_ROWS_BAG_PICKUP = 3;
+	public float screen_width;
+    public float screen_height;
+	private float screenWidth;
+	private float screenHeight;
+	
 	private Texture BagDestroy;
 	private TextureRegion[] bagDestroyRegion;
 	private Animation bagDestroyAnimation;
 	private TextureRegion bagDestroyFrame;
 	private float bagDestroyMoveTime;
 	private float bagDestroyStateTime;
-	private boolean spawnBag;
-	private boolean escalatorMoved;
-	private static final float BAG_SPEED = 10f;
 	private boolean destroyBag = true;
+	
+	private Texture bagPickUpTexture;
+	private TextureRegion[] bagPickUpRegion;
+	private Animation bagPickUpAnimation;
+	private TextureRegion bagPickUpFrame;
+	private float bagPickUpMoveTime;
+	private float bagPickUpStateTime;
+	private boolean bagPickUp = false;
+	private boolean destroyBag2;
+	
+	private BitmapFont font;
+	private float startTime = 0;
+	private Actor splashActor;
+	private ArrayList<BagTarget> targets;
+	private int pickUpIndex;
+	
+	private float bagSize;
 
 	@Override
 	public void create() {
-		User user = new User();
+		user = new User(); 
+		font = new BitmapFont();
+		font.setColor(Color.WHITE);
+		font.setScale(2f);
 		
-		letters = new Array<LetterActor>();
+		letters = new Array<LetterActor>(); 
 
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 800, 480);
@@ -84,13 +120,28 @@ public class Glow implements ApplicationListener {
 		screenHeight = Gdx.graphics.getHeight();
 
 		batch = new SpriteBatch();
-		
-		backgroundTexture = new Texture(Gdx.files.internal("NewG/Bakgrunn4.png"));
+		 
+		backgroundTexture = new Texture(Gdx.files.internal("NewG/Bakgrunn6.png"));
 		backgroundTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-	    TextureRegion region = new TextureRegion(backgroundTexture, 0, 0, (int) screenWidth, (int) screenHeight); 
+	    TextureRegion region = new TextureRegion(backgroundTexture, 0, 0, (int) screenWidth, (int) screenHeight);
 	    backgroundSprite = new Sprite(region);
 
 		bags = new ArrayList<BagActor>(6);
+		targets = new ArrayList<BagTarget>(6);
+		
+		//Bag pickup
+		bagPickUpTexture = new Texture(Gdx.files.internal("bagPickup/bagPickup001.png"));
+
+		TextureRegion[][] bpr = TextureRegion.split(bagPickUpTexture, bagPickUpTexture.getWidth() / FRAME_COLS_BAG_PICKUP, bagPickUpTexture.getHeight() / FRAME_ROWS_BAG_PICKUP);
+		bagPickUpRegion = new TextureRegion[FRAME_COLS_BAG_PICKUP * FRAME_ROWS_BAG_PICKUP];
+		int entry = 0;
+		for (int i = 0; i < FRAME_ROWS_BAG_PICKUP; i++) {
+			for (int j = 0; j < FRAME_COLS_BAG_PICKUP; j++) {
+				bagPickUpRegion[entry++] = bpr[i][j];
+			}
+		}
+
+		bagPickUpAnimation = new Animation(0.1f, bagPickUpRegion);
 
 		//Escalator back animation
 		escalator = new Texture(Gdx.files.internal("NewG/escalator009.png"));
@@ -107,8 +158,8 @@ public class Glow implements ApplicationListener {
 		escalatorAnimation = new Animation(0.1f, escalatorRegion);
 		
 		//Escalator back animation
-		BagSpawn = new Texture(Gdx.files.internal("NewG/bagSpawn003.png"));
-
+		BagSpawn = new Texture(Gdx.files.internal("bagSpawn/bagSpawn004.png"));
+		
 		TextureRegion[][] bs = TextureRegion.split(BagSpawn, BagSpawn.getWidth() / FRAME_COLS_BAG_SPAWN, BagSpawn.getHeight() / FRAME_ROWS_BAG_SPAWN);
 		bagSpawnRegion = new TextureRegion[FRAME_COLS_BAG_SPAWN * FRAME_ROWS_BAG_SPAWN];
 		int in = 0;
@@ -121,7 +172,7 @@ public class Glow implements ApplicationListener {
 		bagSpawnAnimation = new Animation(0.1f, bagSpawnRegion);
 		
 		//Escalator back animation
-		BagDestroy = new Texture(Gdx.files.internal("NewG/bagDestroy003.png"));
+		BagDestroy = new Texture(Gdx.files.internal("bagDestroy/bagDestroy004.png"));
 
 		TextureRegion[][] bd = TextureRegion.split(BagDestroy, BagDestroy.getWidth() / FRAME_COLS_BAG_SPAWN, BagDestroy.getHeight() / FRAME_ROWS_BAG_SPAWN);
 		bagDestroyRegion = new TextureRegion[FRAME_COLS_BAG_SPAWN * FRAME_ROWS_BAG_SPAWN];
@@ -139,9 +190,20 @@ public class Glow implements ApplicationListener {
 		
 		stage = new Stage(new StretchViewport(screen_width, screen_height));
 		Gdx.input.setInputProcessor(stage);
+		
+		Bag exampleBag = new Bag();
+		BagActor bagActorExample = new BagActor(exampleBag, stage,0);
+		bagSize = bagActorExample.getBag().getTextureRegion().getRegionWidth();
 
 		dragAndDrop = new DragAndDrop();
 		dragAndDrop.setDragActorPosition(-(Gdx.graphics.getWidth()/6.4f)/2, (Gdx.graphics.getHeight()/6.4f)/2);
+		
+		splashActor = new Actor();
+		Image splashSprite = new Image(new Texture(Gdx.files.internal("NewG/GetRdy.png")));
+		splashActor = splashSprite;
+		splashActor.setPosition(300, 300);
+		splashActor.setScale(0.5f);
+		stage.addActor(splashActor);
 	}
 
 	@Override
@@ -157,9 +219,22 @@ public class Glow implements ApplicationListener {
 		
 		deltaTime = Gdx.graphics.getDeltaTime();
 		
+		startTime += deltaTime;
+		if(startTime > 6f){
+			stage.getRoot().removeActor(splashActor);
+		}
+		
+		if (bagPickUpMoveTime < bagPickUpAnimation.getAnimationDuration()) {
+			// Speed of bag spawn
+			bagPickUpStateTime += deltaTime;
+			
+			bagPickUpFrame = bagPickUpAnimation.getKeyFrame(bagPickUpStateTime, false);
+			bagPickUpMoveTime += deltaTime;
+		}
+		
 		if (bagSpawnMoveTime < bagSpawnAnimation.getAnimationDuration()) {
 			// Speed of bag spawn
-			bagSpawnStateTime += deltaTime;
+			bagSpawnStateTime += deltaTime*2;
 			
 			bagSpawnFrame = bagSpawnAnimation.getKeyFrame(bagSpawnStateTime, false);
 			bagSpawnMoveTime += deltaTime;
@@ -167,7 +242,7 @@ public class Glow implements ApplicationListener {
 		
 		if (bagDestroyMoveTime < bagDestroyAnimation.getAnimationDuration()) {
 			// Speed of bag destroy
-			bagDestroyStateTime += deltaTime;
+			bagDestroyStateTime += deltaTime*2;
 			bagDestroyFrame = bagDestroyAnimation.getKeyFrame(bagDestroyStateTime, false);
 			bagDestroyMoveTime += deltaTime;
 		}
@@ -176,7 +251,7 @@ public class Glow implements ApplicationListener {
 			escalatorFrame = escalatorAnimation.getKeyFrame(escalatorStateTime, true);
 			if(bags.size() > 1){
 				// Speed of escalator
-				escalatorStateTime += deltaTime*2.9;
+				escalatorStateTime += deltaTime*4.4;
 			}
 			// Duration of escalator movement
 			escalatorMoveTime += deltaTime*1.8;
@@ -193,15 +268,37 @@ public class Glow implements ApplicationListener {
 		batch.begin();
 		backgroundSprite.draw(batch);
 		// Draw escalator
-		batch.draw(escalatorFrame, 0, screen_height/1.83f);
+		batch.draw(escalatorFrame, 0, screen_height/1.90f);
 		batch.end();
 		
 		stage.act(deltaTime);
 		stage.draw();
 		
+		for(int i = 0; i<bags.size(); i++){
+			if(bags.get(i).getBag().isFull()){
+				pickUpIndex = i;
+				if(!bagPickUp){
+					bagPickUpStateTime = 0;
+					bagPickUpMoveTime = 0;
+					bagPickUp = true;
+				}
+				if(bagSpawnAnimation.getKeyFrameIndex(bagPickUpStateTime) == 20){ 
+					bags.get(i).remove();
+					bags.remove(i);
+				}
+				if(bagPickUpMoveTime > bagPickUpAnimation.getAnimationDuration()){
+					bagPickUp = false;
+				}
+			}
+		}
+		
 		batch.begin();
 		batch.draw(bagSpawnFrame, 0, screenHeight-bagSpawnFrame.getRegionHeight());
 		batch.draw(bagDestroyFrame, screenWidth-bagDestroyFrame.getRegionWidth(), screenHeight-bagDestroyFrame.getRegionHeight());
+		if(pickUpIndex != 0){
+			batch.draw(bagPickUpFrame, (int) bagValues[pickUpIndex]-(bagSize/2)-(bagPickUpFrame.getRegionHeight()/2), screen_height-bagPickUpFrame.getRegionHeight());
+		}
+		font.draw(batch, user.getPoints(), 400, 200);
 		batch.end();
 		
 		theTime = TimeUtils.millis();
@@ -211,13 +308,6 @@ public class Glow implements ApplicationListener {
 
 		newBag();
 		newLetters();
-		
-		for(int i = 0; i<bags.size(); i++){
-			if(bags.get(i).getBag().isFull()){
-				bags.get(i).remove();
-				bags.remove(i);
-			}
-		}
 	}
 
 	private void newBag() {
@@ -235,7 +325,7 @@ public class Glow implements ApplicationListener {
 			bagSpawnMoveTime = 0f;
 		}
 		
-		if(bagSpawnAnimation.getKeyFrameIndex(bagSpawnStateTime) == 12 && spawnBag == true){
+		if(bagSpawnAnimation.getKeyFrameIndex(bagSpawnStateTime) == 25 && spawnBag == true){ 
 			addBagStage();
 			spawnBag = false;
 		}
@@ -258,28 +348,31 @@ public class Glow implements ApplicationListener {
 				}
 			}
 			if(bags.size() == 7){
+				dragAndDrop.removeTarget(targets.get(6));
 				if(destroyBag && escalatorMoveTime >= escalatorAnimation.getAnimationDuration()/1.8){
 					bagDestroyStateTime = 0f;
 					bagDestroyMoveTime = 0;
 					destroyBag = false;
+					destroyBag2 = false;
 				}
-				destroyBag();
 			}
+			destroyBag();
 		}
 	}
 	
 	private void destroyBag(){
-		if(bagDestroyAnimation.getKeyFrameIndex(bagDestroyStateTime) == 12){
-			bags.get(6).remove();
-			bags.remove(6);
+		if(bagDestroyAnimation.getKeyFrameIndex(bagDestroyStateTime) == 25 && destroyBag2 == false){
+			bags.get(bags.size()-1).remove();
+			bags.remove(bags.size()-1);
 			destroyBag = true;
+			destroyBag2 = true;
 		}
 	}
 
 	private void spawnLetters() {
 		Letter letter = new Letter();
 		LetterActor letterActor = new LetterActor(letter,stage);
-		dragAndDrop.addSource(new LetterSource(letterActor));
+		dragAndDrop.addSource(new LetterSource(letterActor, user));
         stage.addActor(letterActor);
 		letters.add(letterActor);
 		lastLetterTime = theTime;
@@ -289,10 +382,12 @@ public class Glow implements ApplicationListener {
 		Bag bag = new Bag();
         bagActor = new BagActor(bag, stage,bagSpawnFrame.getRegionWidth()/3);
 		bags.add(0, bagActor);
+		BagTarget bagTarget = new BagTarget(bagActor);
+		dragAndDrop.addTarget(bagTarget);
+		targets.add(0,bagTarget);
 	} 
 	
 	private void addBagStage(){
-		dragAndDrop.addTarget(new BagTarget(bagActor));
         stage.addActor(bagActor);
 	}
 

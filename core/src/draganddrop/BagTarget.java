@@ -2,6 +2,7 @@ package draganddrop;
 
 import objects.Bag;
 import actors.BagActor;
+import actors.LetterActor;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Payload;
@@ -30,8 +31,10 @@ public class BagTarget extends Target {
 
     @Override
 	public void drop(Source source, Payload payload, float x, float y, int pointer) {
-    	Bag bag = actor.getBag();
-    	bag.increaseLevel();
+    	LetterActor letterActor = (LetterActor) payload.getDragActor();
+    	if(actor.getBag().getCountry().equals(letterActor.getLetter().getNationality())){
+    		actor.getBag().increaseLevel();
+		}
 	}
 }
 

@@ -3,11 +3,15 @@ package user;
 public class User {
 	private int points;
 	private int level;
-	private int[] range = {1};
+	private int[] range = {5};
 	
 	public User(){
 		points = 0;
 		level = 0;
+	}
+	
+	public void increasePoints() {
+		this.points += 40;
 	}
 
 	public void setPoints(int points) {
@@ -18,8 +22,9 @@ public class User {
 		this.level = level;
 	}
 
-	public int getPoints() {
-		return points;
+	public String getPoints() {
+		String pointsString = String.valueOf(points);
+		return pointsString;
 	}
 
 	public int getLevel() {
