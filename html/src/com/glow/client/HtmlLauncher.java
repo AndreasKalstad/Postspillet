@@ -1,6 +1,7 @@
 package com.glow.client;
 
 import objects.Glow;
+import objects.PostGame;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
@@ -15,6 +16,6 @@ public class HtmlLauncher extends GwtApplication {
 
    @Override
    public ApplicationListener getApplicationListener () {
-      return new Glow();
+      return new PostGame();
    }
 }
