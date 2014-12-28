@@ -5,22 +5,26 @@ import actors.BagActor;
 import actors.LetterActor;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
@@ -29,7 +33,7 @@ import draganddrop.BagTarget;
 import draganddrop.LetterSource;
 import user.User;
 
-public class Glow implements ApplicationListener {
+public class Glow implements Screen {
 	private Array<LetterActor> letters;
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
@@ -103,9 +107,15 @@ public class Glow implements ApplicationListener {
 	private int pickUpIndex;
 	
 	private float bagSize;
+	private boolean pause;
+	private ImageButton pauseButton;
+	private float pauseDeltaTime = 0;
+	private long pauseTime = 0;
 
-	@Override
-	public void create() {
+	private PostGame game;
+	
+	public Glow(PostGame game){
+		this.game = game;
 		user = new User(); 
 		font = new BitmapFont();
 		font.setColor(Color.WHITE);
@@ -118,6 +128,10 @@ public class Glow implements ApplicationListener {
 		
 		screenWidth = Gdx.graphics.getWidth();
 		screenHeight = Gdx.graphics.getHeight();
+		
+		pauseButton = new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("brev/brev1.png")))));
+		pauseButton.setScale(0.5f);
+		pauseButton.setPosition(50, 50);
 
 		batch = new SpriteBatch();
 		 
@@ -130,7 +144,7 @@ public class Glow implements ApplicationListener {
 		targets = new ArrayList<BagTarget>(6);
 		
 		//Bag pickup
-		bagPickUpTexture = new Texture(Gdx.files.internal("bagPickup/bagPickup001.png"));
+		bagPickUpTexture = new Texture(Gdx.files.internal("bagPickup/bagPickup002.png"));
 
 		TextureRegion[][] bpr = TextureRegion.split(bagPickUpTexture, bagPickUpTexture.getWidth() / FRAME_COLS_BAG_PICKUP, bagPickUpTexture.getHeight() / FRAME_ROWS_BAG_PICKUP);
 		bagPickUpRegion = new TextureRegion[FRAME_COLS_BAG_PICKUP * FRAME_ROWS_BAG_PICKUP];
@@ -191,6 +205,11 @@ public class Glow implements ApplicationListener {
 		stage = new Stage(new StretchViewport(screen_width, screen_height));
 		Gdx.input.setInputProcessor(stage);
 		
+		InputMultiplexer inputMultiplexer = new InputMultiplexer();
+		inputMultiplexer.addProcessor(stage);
+		inputMultiplexer.addProcessor(initPause());
+		Gdx.input.setInputProcessor(inputMultiplexer);
+		
 		Bag exampleBag = new Bag();
 		BagActor bagActorExample = new BagActor(exampleBag, stage,0);
 		bagSize = bagActorExample.getBag().getTextureRegion().getRegionWidth();
@@ -204,6 +223,27 @@ public class Glow implements ApplicationListener {
 		splashActor.setPosition(300, 300);
 		splashActor.setScale(0.5f);
 		stage.addActor(splashActor);
+		
+		stage.addActor(pauseButton);
+	}
+	
+	private InputProcessor initPause(){
+		InputProcessor inputProcessor = new InputAdapter() {
+		    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		    	if(screenX >= pauseButton.getX() && screenX <= pauseButton.getX() + pauseButton.getWidth() && screenHeight-screenY >= pauseButton.getY() && screenHeight-screenY <= pauseButton.getY() + pauseButton.getHeight()){
+			        if(pause == false) { 
+			            pause();
+			            return true;
+			        }
+			        if(pause == true){
+			        	resume(); 
+			        	return true;
+			        }
+			    } 
+			        return false;
+		    }
+		};
+		return inputProcessor;
 	}
 
 	@Override
@@ -212,12 +252,19 @@ public class Glow implements ApplicationListener {
 	}
 
 	@Override
-	public void render() {
+	public void render(float delta) {
 		Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 		camera.update();
 		
-		deltaTime = Gdx.graphics.getDeltaTime();
+		if(!pause){
+			deltaTime = delta - pauseDeltaTime;
+			theTime = TimeUtils.millis() - pauseTime;
+		}
+		if(pause){
+			pauseDeltaTime = Gdx.graphics.getDeltaTime() - deltaTime;
+			pauseTime = TimeUtils.millis() - theTime;
+		}
 		
 		startTime += deltaTime;
 		if(startTime > 6f){
@@ -226,35 +273,45 @@ public class Glow implements ApplicationListener {
 		
 		if (bagPickUpMoveTime < bagPickUpAnimation.getAnimationDuration()) {
 			// Speed of bag spawn
-			bagPickUpStateTime += deltaTime;
+			if(!pause){
+				bagPickUpStateTime += deltaTime;
+				bagPickUpMoveTime += deltaTime;
+			}
 			
 			bagPickUpFrame = bagPickUpAnimation.getKeyFrame(bagPickUpStateTime, false);
-			bagPickUpMoveTime += deltaTime;
 		}
 		
 		if (bagSpawnMoveTime < bagSpawnAnimation.getAnimationDuration()) {
 			// Speed of bag spawn
-			bagSpawnStateTime += deltaTime*2;
+			if(!pause){
+				bagSpawnStateTime += deltaTime*2;
+				bagSpawnMoveTime += deltaTime;
+			}
 			
 			bagSpawnFrame = bagSpawnAnimation.getKeyFrame(bagSpawnStateTime, false);
-			bagSpawnMoveTime += deltaTime;
 		}
 		
 		if (bagDestroyMoveTime < bagDestroyAnimation.getAnimationDuration()) {
 			// Speed of bag destroy
-			bagDestroyStateTime += deltaTime*2;
+			if(!pause){
+				bagDestroyStateTime += deltaTime*2;
+				bagDestroyMoveTime += deltaTime;
+			}
 			bagDestroyFrame = bagDestroyAnimation.getKeyFrame(bagDestroyStateTime, false);
-			bagDestroyMoveTime += deltaTime;
 		}
 		
 		if (escalatorMoveTime < escalatorAnimation.getAnimationDuration()/1.8) {
-			escalatorFrame = escalatorAnimation.getKeyFrame(escalatorStateTime, true);
 			if(bags.size() > 1){
 				// Speed of escalator
-				escalatorStateTime += deltaTime*4.4;
+				if(!pause){
+					escalatorStateTime += deltaTime*4.4;
+				}
 			}
-			// Duration of escalator movement
-			escalatorMoveTime += deltaTime*1.8;
+			if(!pause){
+				// Duration of escalator movement
+				escalatorMoveTime += deltaTime*1.8;
+			}
+			escalatorFrame = escalatorAnimation.getKeyFrame(escalatorStateTime, true);
 		}
 		
 		// Set scaled positions for the bags
@@ -296,12 +353,11 @@ public class Glow implements ApplicationListener {
 		batch.draw(bagSpawnFrame, 0, screenHeight-bagSpawnFrame.getRegionHeight());
 		batch.draw(bagDestroyFrame, screenWidth-bagDestroyFrame.getRegionWidth(), screenHeight-bagDestroyFrame.getRegionHeight());
 		if(pickUpIndex != 0){
-			batch.draw(bagPickUpFrame, (int) bagValues[pickUpIndex]-(bagSize/2)-(bagPickUpFrame.getRegionHeight()/2), screen_height-bagPickUpFrame.getRegionHeight());
+			batch.draw(bagPickUpFrame, (int) bagValues[pickUpIndex-1]+(bagSize/2)-(bagPickUpFrame.getRegionWidth()/2), screen_height-bagPickUpFrame.getRegionHeight());
 		}
 		font.draw(batch, user.getPoints(), 400, 200);
-		batch.end();
+		batch.end(); 
 		
-		theTime = TimeUtils.millis();
 		if(lastBagTime == 0){
 			lastBagTime = theTime;
 		}
@@ -329,7 +385,9 @@ public class Glow implements ApplicationListener {
 			addBagStage();
 			spawnBag = false;
 		}
-		moveBags();
+		if(!pause){
+			moveBags();
+		}
 	}
 
 	private void newLetters() {
@@ -371,7 +429,7 @@ public class Glow implements ApplicationListener {
 
 	private void spawnLetters() {
 		Letter letter = new Letter();
-		LetterActor letterActor = new LetterActor(letter,stage);
+		LetterActor letterActor = new LetterActor(letter,stage,pause);
 		dragAndDrop.addSource(new LetterSource(letterActor, user));
         stage.addActor(letterActor);
 		letters.add(letterActor);
@@ -393,19 +451,29 @@ public class Glow implements ApplicationListener {
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
-
+		pause = true;
 	}
 
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
-
+		pause = false;
 	}
 
 	@Override
 	public void dispose() {
 		stage.dispose();
 		batch.dispose();
+	}
+
+	@Override
+	public void show() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void hide() {
+		// TODO Auto-generated method stub
+		
 	}
 }

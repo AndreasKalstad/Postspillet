@@ -1,6 +1,6 @@
 package com.glow.android;
 
-import objects.Glow;
+import objects.PostGame;
 import android.os.Bundle;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
@@ -14,6 +14,6 @@ public class GameLauncher extends AndroidApplication {
 	      config.useAccelerometer = false;
 	      config.useCompass = false;
 	
-	      initialize(new Glow(), config);
+	      initialize(new PostGame(), config);
 	   }
 }

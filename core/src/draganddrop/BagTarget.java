@@ -1,6 +1,5 @@
 package draganddrop;
 
-import objects.Bag;
 import actors.BagActor;
 import actors.LetterActor;
 
