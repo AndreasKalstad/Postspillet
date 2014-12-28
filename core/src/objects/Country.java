@@ -13,7 +13,7 @@ public class Country {
 	private String[] countries = {"denmark", "finland", "norway", "sweden","deutschland"};
 	private Array<TextureRegion[]> all;
 	private User user;
-	private static final int FRAME_COLS_BAG_SPAWN = 4;
+	private static final int FRAME_COLS_BAG_SPAWN = 5;
 	private static final int FRAME_ROWS_BAG_SPAWN = 5;
 	
 	public Country(){

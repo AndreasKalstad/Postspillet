@@ -16,7 +16,7 @@ public class BagTarget extends Target {
         super(actor);
         this.actor = actor;
         actor.setX(actor.getStartX());
-        actor.setY(Gdx.graphics.getHeight()/1.65f);
+        actor.setY(Gdx.graphics.getHeight()/1.8f);
     }
 
     @Override

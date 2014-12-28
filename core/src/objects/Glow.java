@@ -1,9 +1,9 @@
 package objects;
 
 import java.util.ArrayList;
+
 import actors.BagActor;
 import actors.LetterActor;
-import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
@@ -78,8 +78,6 @@ public class Glow implements Screen {
 	
 	private static final int FRAME_COLS_BAG_PICKUP = 13;
 	private static final int FRAME_ROWS_BAG_PICKUP = 3;
-	public float screen_width;
-    public float screen_height;
 	private float screenWidth;
 	private float screenHeight;
 	
@@ -109,10 +107,12 @@ public class Glow implements Screen {
 	private float bagSize;
 	private boolean pause;
 	private ImageButton pauseButton;
-	private float pauseDeltaTime = 0;
+	private float pausedelta = 0;
 	private long pauseTime = 0;
 
 	private PostGame game;
+	private InputMultiplexer inputMultiplexer;
+	int counter;
 	
 	public Glow(PostGame game){
 		this.game = game;
@@ -128,6 +128,10 @@ public class Glow implements Screen {
 		
 		screenWidth = Gdx.graphics.getWidth();
 		screenHeight = Gdx.graphics.getHeight();
+		
+		pauseTime = TimeUtils.millis();
+		System.out.println("lol");
+		theTime = pauseTime;
 		
 		pauseButton = new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("brev/brev1.png")))));
 		pauseButton.setScale(0.5f);
@@ -199,16 +203,13 @@ public class Glow implements Screen {
 
 		bagDestroyAnimation = new Animation(0.1f, bagDestroyRegion);
 		
-		screen_width = Gdx.graphics.getWidth();
-	    screen_height = Gdx.graphics.getHeight();
+		stage = new Stage(new StretchViewport(screenWidth, screenHeight));
 		
-		stage = new Stage(new StretchViewport(screen_width, screen_height));
-		Gdx.input.setInputProcessor(stage);
-		
-		InputMultiplexer inputMultiplexer = new InputMultiplexer();
+		inputMultiplexer = new InputMultiplexer();
 		inputMultiplexer.addProcessor(stage);
 		inputMultiplexer.addProcessor(initPause());
 		Gdx.input.setInputProcessor(inputMultiplexer);
+		game.setMultiplexer(inputMultiplexer);
 		
 		Bag exampleBag = new Bag();
 		BagActor bagActorExample = new BagActor(exampleBag, stage,0);
@@ -235,12 +236,8 @@ public class Glow implements Screen {
 			            pause();
 			            return true;
 			        }
-			        if(pause == true){
-			        	resume(); 
-			        	return true;
-			        }
 			    } 
-			        return false;
+			    return false;
 		    }
 		};
 		return inputProcessor;
@@ -257,16 +254,15 @@ public class Glow implements Screen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 		camera.update();
 		
-		if(!pause){
-			deltaTime = delta - pauseDeltaTime;
-			theTime = TimeUtils.millis() - pauseTime;
-		}
+		deltaTime = delta;
+		theTime += 18;
+		
 		if(pause){
-			pauseDeltaTime = Gdx.graphics.getDeltaTime() - deltaTime;
-			pauseTime = TimeUtils.millis() - theTime;
+			pauseTime = theTime;
+			game.setScreen(game.getPauseScreen());
 		}
 		
-		startTime += deltaTime;
+		startTime += delta;
 		if(startTime > 6f){
 			stage.getRoot().removeActor(splashActor);
 		}
@@ -274,8 +270,8 @@ public class Glow implements Screen {
 		if (bagPickUpMoveTime < bagPickUpAnimation.getAnimationDuration()) {
 			// Speed of bag spawn
 			if(!pause){
-				bagPickUpStateTime += deltaTime;
-				bagPickUpMoveTime += deltaTime;
+				bagPickUpStateTime += delta; 
+				bagPickUpMoveTime += delta;
 			}
 			
 			bagPickUpFrame = bagPickUpAnimation.getKeyFrame(bagPickUpStateTime, false);
@@ -284,8 +280,8 @@ public class Glow implements Screen {
 		if (bagSpawnMoveTime < bagSpawnAnimation.getAnimationDuration()) {
 			// Speed of bag spawn
 			if(!pause){
-				bagSpawnStateTime += deltaTime*2;
-				bagSpawnMoveTime += deltaTime;
+				bagSpawnStateTime += delta*2;
+				bagSpawnMoveTime += delta;
 			}
 			
 			bagSpawnFrame = bagSpawnAnimation.getKeyFrame(bagSpawnStateTime, false);
@@ -294,8 +290,8 @@ public class Glow implements Screen {
 		if (bagDestroyMoveTime < bagDestroyAnimation.getAnimationDuration()) {
 			// Speed of bag destroy
 			if(!pause){
-				bagDestroyStateTime += deltaTime*2;
-				bagDestroyMoveTime += deltaTime;
+				bagDestroyStateTime += delta*2;
+				bagDestroyMoveTime += delta;
 			}
 			bagDestroyFrame = bagDestroyAnimation.getKeyFrame(bagDestroyStateTime, false);
 		}
@@ -304,12 +300,12 @@ public class Glow implements Screen {
 			if(bags.size() > 1){
 				// Speed of escalator
 				if(!pause){
-					escalatorStateTime += deltaTime*4.4;
+					escalatorStateTime += delta*4.4;
 				}
 			}
 			if(!pause){
 				// Duration of escalator movement
-				escalatorMoveTime += deltaTime*1.8;
+				escalatorMoveTime += delta*1.8;
 			}
 			escalatorFrame = escalatorAnimation.getKeyFrame(escalatorStateTime, true);
 		}
@@ -325,10 +321,10 @@ public class Glow implements Screen {
 		batch.begin();
 		backgroundSprite.draw(batch);
 		// Draw escalator
-		batch.draw(escalatorFrame, 0, screen_height/1.90f);
+		batch.draw(escalatorFrame, 0, screenHeight/1.90f);
 		batch.end();
 		
-		stage.act(deltaTime);
+		stage.act(delta);
 		stage.draw();
 		
 		for(int i = 0; i<bags.size(); i++){
@@ -353,7 +349,7 @@ public class Glow implements Screen {
 		batch.draw(bagSpawnFrame, 0, screenHeight-bagSpawnFrame.getRegionHeight());
 		batch.draw(bagDestroyFrame, screenWidth-bagDestroyFrame.getRegionWidth(), screenHeight-bagDestroyFrame.getRegionHeight());
 		if(pickUpIndex != 0){
-			batch.draw(bagPickUpFrame, (int) bagValues[pickUpIndex-1]+(bagSize/2)-(bagPickUpFrame.getRegionWidth()/2), screen_height-bagPickUpFrame.getRegionHeight());
+			batch.draw(bagPickUpFrame, (int) bagValues[pickUpIndex-1]+(bagSize/2)-(bagPickUpFrame.getRegionWidth()/2), screenHeight-bagPickUpFrame.getRegionHeight());
 		}
 		font.draw(batch, user.getPoints(), 400, 200);
 		batch.end(); 
@@ -367,6 +363,8 @@ public class Glow implements Screen {
 	}
 
 	private void newBag() {
+		long time = theTime - lastBagTime;
+		System.out.println(time);
 		if (theTime - lastBagTime > 4000) {
 			escalatorMoved = true;
 			spawnBag = true;
@@ -456,6 +454,7 @@ public class Glow implements Screen {
 
 	@Override
 	public void resume() {
+		theTime = pauseTime;
 		pause = false;
 	}
 
