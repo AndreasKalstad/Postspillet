@@ -11,10 +11,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 public class Pause implements Screen{
@@ -22,13 +25,17 @@ public class Pause implements Screen{
 	private OrthographicCamera camera;
 	private Texture backgroundTexture;
 	private Sprite backgroundSprite;
-	private int screenWidth;
-	private int screenHeight;
+	private float screenWidth;
+	private float screenHeight;
 	private SpriteBatch batch;
-	private ImageButton pauseButton;
+	private Sprite continueButton;
+	private Sprite menuButton;
+	private Sprite restartButton;
+	private Sprite muteButton;
+	
+	private TextureAtlas pauseScreen = new TextureAtlas("pauseScreen/pauseScreen.txt");
 	
 	private PostGame game;
-	private Stage stage;
 	protected boolean pause;
 
 	public Pause(PostGame game){
@@ -40,23 +47,27 @@ public class Pause implements Screen{
 		screenWidth = Gdx.graphics.getWidth();
 		screenHeight = Gdx.graphics.getHeight();
 		
-		stage = new Stage(new StretchViewport(screenWidth, screenHeight));
+		backgroundSprite = pauseScreen.createSprite("pauseScreen_BG");
 		
-		pauseButton = new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("brev/brev1.png")))));
-		pauseButton.setScale(0.5f);
-		pauseButton.setPosition(150, 150);
+//		ContinueButton
+		continueButton =new Sprite(pauseScreen.createSprite("pauseScreen_Continue"));
+		continueButton.setPosition( (screenWidth/2.5f),(screenHeight/4));
 		
-		stage.addActor(pauseButton);
+		menuButton = new Sprite(pauseScreen.createSprite("pauseScreen_MainMenu"));
+		menuButton.setPosition( (screenWidth/5.17f),(screenHeight/4));
 		
-		backgroundTexture = new Texture(Gdx.files.internal("Play_Pause/pauseScreen.png"));
-		backgroundTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-	    TextureRegion region = new TextureRegion(backgroundTexture, 0, 0, (int) screenWidth, (int) screenHeight);
-	    backgroundSprite = new Sprite(region);
+		
+		restartButton = new Sprite(pauseScreen.createSprite("pauseScreen_Restart"));
+		restartButton.setPosition( (screenWidth/1.584f),(screenHeight/4));
+		
+		muteButton = new Sprite(pauseScreen.createSprite("pauseScreen_Mute"));
+		muteButton.setPosition( (screenWidth/1.24f),(screenHeight/1.352f));
+		
+		//Buttons
 	    
 	    batch = new SpriteBatch();
 	    
 	    InputMultiplexer inputMultiplexer = game.getMultiplexer();
-		inputMultiplexer.addProcessor(stage);
 		inputMultiplexer.addProcessor(init());
 		Gdx.input.setInputProcessor(inputMultiplexer);
 	}
@@ -69,21 +80,36 @@ public class Pause implements Screen{
 		
 		batch.begin();
 		backgroundSprite.draw(batch);
+		continueButton.draw(batch);
+		menuButton.draw(batch);
+		muteButton.draw(batch);
+		restartButton.draw(batch);
 		batch.end();
-		
-		stage.act(delta);
-		stage.draw();
+
 	}
 	
 	private InputProcessor init(){
 		InputProcessor inputProcessor = new InputAdapter() {
 
 			public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		    	if(screenX >= pauseButton.getX() && screenX <= pauseButton.getX() + pauseButton.getWidth() && screenHeight-screenY >= pauseButton.getY() && screenHeight-screenY <= pauseButton.getY() + pauseButton.getHeight()){
+				
+		    	if(screenX >= continueButton.getX() && screenX <= continueButton.getX() + continueButton.getWidth() && screenHeight-screenY >= continueButton.getY() && screenHeight-screenY <= continueButton.getY() + continueButton.getHeight()){
 		    		game.resume();
 		    		game.setScreen(game.getGameScreen());
 			    }
-			    return false;
+		    	
+		    	if(screenX >= menuButton.getX() && screenX <= menuButton.getX() + menuButton.getWidth() && screenHeight-screenY >= menuButton.getY() && screenHeight-screenY <= menuButton.getY() + menuButton.getHeight()){
+		    		System.out.println("Meny");
+			    }
+		    	
+		    	if(screenX >= restartButton.getX() && screenX <= restartButton.getX() + restartButton.getWidth() && screenHeight-screenY >= restartButton.getY() && screenHeight-screenY <= restartButton.getY() + restartButton.getHeight()){
+		    		System.out.println("Restart");
+			    }
+
+		    	if(screenX >= muteButton.getX() && screenX <= muteButton.getX() + muteButton.getWidth() && screenHeight-screenY >= muteButton.getY() && screenHeight-screenY <= muteButton.getY() + muteButton.getHeight()){
+		    		System.out.println("Mute"); 
+		    	}
+			    return false; 
 		    }
 		};
 		return inputProcessor;
@@ -91,7 +117,6 @@ public class Pause implements Screen{
 
 	@Override
 	public void resize(int width, int height) {
-		stage.getViewport().update(width, height, true);
 	}
 
 	@Override
