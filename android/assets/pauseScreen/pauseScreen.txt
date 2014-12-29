@@ -2,45 +2,45 @@ pauseScreen.png
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-pauseScreen_BG
+PScreen_0000_Pause
   rotate: true
   xy: 2, 2
   size: 800, 480
   orig: 800, 480
   offset: 0, 0
   index: -1
-pauseScreen_Continue
-  rotate: false
-  xy: 2, 804
-  size: 138, 135
-  orig: 800, 480
-  offset: 322, 122
-  index: -1
-pauseScreen_MainMenu
-  rotate: false
-  xy: 142, 804
-  size: 138, 135
-  orig: 800, 480
-  offset: 136, 122
-  index: -1
-pauseScreen_Mute
+PScreen_0000s_0000_SoundOFFforbudt
   rotate: true
   xy: 422, 851
   size: 49, 53
   orig: 800, 480
   offset: 647, 355
   index: -1
-pauseScreen_Restart
-  rotate: false
-  xy: 282, 804
-  size: 138, 135
-  orig: 800, 480
-  offset: 504, 122
-  index: -1
-pauseScreen_Unmute
+PScreen_0000s_0001_SoundON
   rotate: false
   xy: 422, 804
   size: 57, 45
   orig: 800, 480
   offset: 647, 363
+  index: -1
+PScreen_0001s_0000_Power_-_Restart
+  rotate: false
+  xy: 2, 804
+  size: 138, 135
+  orig: 800, 480
+  offset: 504, 122
+  index: -1
+PScreen_0002s_0000_300mmx150mm-exit-left
+  rotate: false
+  xy: 142, 804
+  size: 138, 135
+  orig: 800, 480
+  offset: 136, 122
+  index: -1
+PScreen_0003s_0000_Layer 1
+  rotate: false
+  xy: 282, 804
+  size: 138, 135
+  orig: 800, 480
+  offset: 322, 122
   index: -1
