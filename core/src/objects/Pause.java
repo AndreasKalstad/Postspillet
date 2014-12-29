@@ -33,7 +33,7 @@ public class Pause implements Screen{
 	private Sprite restartButton;
 	private Sprite muteButton;
 	
-	private TextureAtlas pauseScreen = new TextureAtlas("pauseScreen/pauseScreen.txt");
+	private TextureAtlas pauseScreen;
 	
 	private PostGame game;
 	protected boolean pause;
@@ -46,6 +46,8 @@ public class Pause implements Screen{
 		
 		screenWidth = Gdx.graphics.getWidth();
 		screenHeight = Gdx.graphics.getHeight();
+		
+		pauseScreen = new TextureAtlas("pauseScreen/pauseScreen.txt");
 		
 		backgroundSprite = pauseScreen.createSprite("pauseScreen_BG");
 		
