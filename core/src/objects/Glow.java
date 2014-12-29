@@ -107,12 +107,13 @@ public class Glow implements Screen {
 	private float bagSize;
 	private boolean pause;
 	private ImageButton pauseButton;
-	private float pausedelta = 0;
 	private long pauseTime = 0;
 
 	private PostGame game;
 	private InputMultiplexer inputMultiplexer;
 	int counter;
+	private boolean pickUp;
+	private boolean removeBag;
 	
 	public Glow(PostGame game){
 		this.game = game;
@@ -133,9 +134,8 @@ public class Glow implements Screen {
 		System.out.println("lol");
 		theTime = pauseTime;
 		
-		pauseButton = new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("brev/brev1.png")))));
+		pauseButton = new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("Play_Pause/BPause.png")))));
 		pauseButton.setScale(0.5f);
-		pauseButton.setPosition(50, 50);
 
 		batch = new SpriteBatch();
 		 
@@ -253,9 +253,15 @@ public class Glow implements Screen {
 		Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 		camera.update();
-		
+
 		deltaTime = delta;
-		theTime += 18;
+		
+		if((bagPickUpAnimation.getKeyFrameIndex(bagPickUpStateTime) == 38 || bagPickUpAnimation.getKeyFrameIndex(bagPickUpStateTime) == 0)){
+			theTime += 18;
+			pickUp = false;
+		} else {
+			pickUp = true;
+		}
 		
 		if(pause){
 			pauseTime = theTime;
@@ -267,19 +273,9 @@ public class Glow implements Screen {
 			stage.getRoot().removeActor(splashActor);
 		}
 		
-		if (bagPickUpMoveTime < bagPickUpAnimation.getAnimationDuration()) {
-			// Speed of bag spawn
-			if(!pause){
-				bagPickUpStateTime += delta; 
-				bagPickUpMoveTime += delta;
-			}
-			
-			bagPickUpFrame = bagPickUpAnimation.getKeyFrame(bagPickUpStateTime, false);
-		}
-		
 		if (bagSpawnMoveTime < bagSpawnAnimation.getAnimationDuration()) {
 			// Speed of bag spawn
-			if(!pause){
+			if(!pause && !pickUp){
 				bagSpawnStateTime += delta*2;
 				bagSpawnMoveTime += delta;
 			}
@@ -289,7 +285,7 @@ public class Glow implements Screen {
 		
 		if (bagDestroyMoveTime < bagDestroyAnimation.getAnimationDuration()) {
 			// Speed of bag destroy
-			if(!pause){
+			if(!pause && !pickUp){
 				bagDestroyStateTime += delta*2;
 				bagDestroyMoveTime += delta;
 			}
@@ -299,7 +295,7 @@ public class Glow implements Screen {
 		if (escalatorMoveTime < escalatorAnimation.getAnimationDuration()/1.8) {
 			if(bags.size() > 1){
 				// Speed of escalator
-				if(!pause){
+				if(!pause && !pickUp){
 					escalatorStateTime += delta*4.4;
 				}
 			}
@@ -329,6 +325,7 @@ public class Glow implements Screen {
 		
 		for(int i = 0; i<bags.size(); i++){
 			if(bags.get(i).getBag().isFull()){
+				dragAndDrop.removeTarget(targets.get(i));
 				pickUpIndex = i;
 				if(!bagPickUp){
 					bagPickUpStateTime = 0;
@@ -360,19 +357,26 @@ public class Glow implements Screen {
 
 		newBag();
 		newLetters();
+		
+		if (bagPickUpMoveTime < bagPickUpAnimation.getAnimationDuration()) {
+			// Speed of bag spawn
+			if(!pause && escalatorMoveTime > escalatorAnimation.getAnimationDuration()/1.8){
+				bagPickUpStateTime += delta;
+				bagPickUpMoveTime += delta;
+			}
+			
+			bagPickUpFrame = bagPickUpAnimation.getKeyFrame(bagPickUpStateTime, false);
+		}
 	}
 
 	private void newBag() {
-		long time = theTime - lastBagTime;
-		System.out.println(time);
 		if (theTime - lastBagTime > 4000) {
+			spawnBag();
 			escalatorMoved = true;
 			spawnBag = true;
 			lastBagTime = theTime;
 			escalatorMoveTime = 0f;
-			spawnBag();
 		}
-		
 		if (escalatorMoveTime > escalatorAnimation.getAnimationDuration()/1.8 && escalatorMoved == true) { 
 			escalatorMoved = false;
 			bagSpawnStateTime = 0f;
@@ -383,7 +387,7 @@ public class Glow implements Screen {
 			addBagStage();
 			spawnBag = false;
 		}
-		if(!pause){
+		if(!pause && !pickUp){
 			moveBags();
 		}
 	}
@@ -395,6 +399,19 @@ public class Glow implements Screen {
 	}
 
 	private void moveBags() {
+		if(bags.size() == 7){
+			removeBag = true;
+		}
+		if(removeBag){
+			dragAndDrop.removeTarget(targets.get(6));
+			if(destroyBag && escalatorMoveTime >= escalatorAnimation.getAnimationDuration()/1.8){
+				bagDestroyStateTime = 0f;
+				bagDestroyMoveTime = 0;
+				destroyBag = false;
+				destroyBag2 = false;
+			}
+		}
+		destroyBag();
 		for (int i = 1; i < bags.size(); i++) {
 			if (bags.size() < 8) {
 				if (bags.get(i).getX() <= bagValues[i-1]) {
@@ -403,16 +420,6 @@ public class Glow implements Screen {
 					bags.get(i).setX(x);
 				}
 			}
-			if(bags.size() == 7){
-				dragAndDrop.removeTarget(targets.get(6));
-				if(destroyBag && escalatorMoveTime >= escalatorAnimation.getAnimationDuration()/1.8){
-					bagDestroyStateTime = 0f;
-					bagDestroyMoveTime = 0;
-					destroyBag = false;
-					destroyBag2 = false;
-				}
-			}
-			destroyBag();
 		}
 	}
 	
@@ -422,6 +429,7 @@ public class Glow implements Screen {
 			bags.remove(bags.size()-1);
 			destroyBag = true;
 			destroyBag2 = true;
+			removeBag = false;
 		}
 	}
 
