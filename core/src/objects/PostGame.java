@@ -35,4 +35,8 @@ public class PostGame extends Game {
    public void resume(){
 	   glow.resume();
    }
+   
+   public void newGame(Glow newGame){
+	   glow = newGame;
+   }
 }

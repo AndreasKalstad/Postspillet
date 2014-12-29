@@ -2,28 +2,17 @@ package objects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 public class Pause implements Screen{
 
 	private OrthographicCamera camera;
-	private Texture backgroundTexture;
 	private Sprite backgroundSprite;
 	private float screenWidth;
 	private float screenHeight;
@@ -56,7 +45,7 @@ public class Pause implements Screen{
 		continueButton.setPosition( (screenWidth/2.5f),(screenHeight/4));
 		
 		menuButton = new Sprite(pauseScreen.createSprite("pauseScreen_MainMenu"));
-		menuButton.setPosition( (screenWidth/5.17f),(screenHeight/4));
+		menuButton.setPosition( (screenWidth/5.92f),(screenHeight/4));
 		
 		
 		restartButton = new Sprite(pauseScreen.createSprite("pauseScreen_Restart"));
@@ -64,14 +53,8 @@ public class Pause implements Screen{
 		
 		muteButton = new Sprite(pauseScreen.createSprite("pauseScreen_Mute"));
 		muteButton.setPosition( (screenWidth/1.24f),(screenHeight/1.352f));
-		
-		//Buttons
 	    
 	    batch = new SpriteBatch();
-	    
-	    InputMultiplexer inputMultiplexer = game.getMultiplexer();
-		inputMultiplexer.addProcessor(init());
-		Gdx.input.setInputProcessor(inputMultiplexer);
 	}
 
 	@Override
@@ -92,10 +75,8 @@ public class Pause implements Screen{
 	
 	private InputProcessor init(){
 		InputProcessor inputProcessor = new InputAdapter() {
-
 			public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-				
-		    	if(screenX >= continueButton.getX() && screenX <= continueButton.getX() + continueButton.getWidth() && screenHeight-screenY >= continueButton.getY() && screenHeight-screenY <= continueButton.getY() + continueButton.getHeight()){
+				if(screenX >= continueButton.getX() && screenX <= continueButton.getX() + continueButton.getWidth() && screenHeight-screenY >= continueButton.getY() && screenHeight-screenY <= continueButton.getY() + continueButton.getHeight()){
 		    		game.resume();
 		    		game.setScreen(game.getGameScreen());
 			    }
@@ -105,7 +86,9 @@ public class Pause implements Screen{
 			    }
 		    	
 		    	if(screenX >= restartButton.getX() && screenX <= restartButton.getX() + restartButton.getWidth() && screenHeight-screenY >= restartButton.getY() && screenHeight-screenY <= restartButton.getY() + restartButton.getHeight()){
-		    		System.out.println("Restart");
+		    		Glow glow = new Glow(game);
+		    		game.newGame(glow);
+		    		game.setScreen(glow);
 			    }
 
 		    	if(screenX >= muteButton.getX() && screenX <= muteButton.getX() + muteButton.getWidth() && screenHeight-screenY >= muteButton.getY() && screenHeight-screenY <= muteButton.getY() + muteButton.getHeight()){
@@ -123,14 +106,12 @@ public class Pause implements Screen{
 
 	@Override
 	public void show() {
-		// TODO Auto-generated method stub
-		
+		Gdx.input.setInputProcessor(init());
 	}
 
 	@Override
 	public void hide() {
-		// TODO Auto-generated method stub
-		
+		Gdx.input.setInputProcessor(null);
 	}
 
 	@Override

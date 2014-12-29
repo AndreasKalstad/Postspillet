@@ -65,6 +65,11 @@ public class Glow implements Screen {
 	private Texture backgroundTexture;
 	private Sprite backgroundSprite;
 	
+	private Texture fenceBackTexture;
+	private Sprite fenceBackSprite;
+	private Texture fenceFrontTexture;
+	private Sprite fenceFrontSprite;
+	
 	private boolean spawnBag;
 	private Texture BagSpawn;
 	private TextureRegion[] bagSpawnRegion;
@@ -131,7 +136,6 @@ public class Glow implements Screen {
 		screenHeight = Gdx.graphics.getHeight();
 		
 		pauseTime = TimeUtils.millis();
-		System.out.println("lol");
 		theTime = pauseTime;
 		
 		pauseButton = new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("Play_Pause/BPause.png")))));
@@ -143,6 +147,11 @@ public class Glow implements Screen {
 		backgroundTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 	    TextureRegion region = new TextureRegion(backgroundTexture, 0, 0, (int) screenWidth, (int) screenHeight);
 	    backgroundSprite = new Sprite(region);
+	    
+	    TextureRegion fenceBackRegion = new TextureRegion(fenceBackTexture, 0, 0, (int) screenWidth, (int) screenHeight);
+	    fenceBackSprite = new Sprite(fenceBackRegion);
+	    TextureRegion fenceFrontRegion = new TextureRegion(fenceFrontTexture, 0, 0, (int) screenWidth, (int) screenHeight);
+	    fenceFrontSprite = new Sprite(fenceFrontRegion);
 
 		bags = new ArrayList<BagActor>(6);
 		targets = new ArrayList<BagTarget>(6);
@@ -206,10 +215,7 @@ public class Glow implements Screen {
 		stage = new Stage(new StretchViewport(screenWidth, screenHeight));
 		
 		inputMultiplexer = new InputMultiplexer();
-		inputMultiplexer.addProcessor(stage);
-		inputMultiplexer.addProcessor(initPause());
-		Gdx.input.setInputProcessor(inputMultiplexer);
-		game.setMultiplexer(inputMultiplexer);
+		//game.setMultiplexer(inputMultiplexer);
 		
 		Bag exampleBag = new Bag();
 		BagActor bagActorExample = new BagActor(exampleBag, stage,0);
@@ -361,7 +367,7 @@ public class Glow implements Screen {
 		if (bagPickUpMoveTime < bagPickUpAnimation.getAnimationDuration()) {
 			// Speed of bag spawn
 			if(!pause && escalatorMoveTime > escalatorAnimation.getAnimationDuration()/1.8){
-				bagPickUpStateTime += delta;
+				bagPickUpStateTime += delta; 
 				bagPickUpMoveTime += delta;
 			}
 			
@@ -474,13 +480,13 @@ public class Glow implements Screen {
 
 	@Override
 	public void show() {
-		// TODO Auto-generated method stub
-		
+		inputMultiplexer.addProcessor(stage);
+		inputMultiplexer.addProcessor(initPause());
+		Gdx.input.setInputProcessor(inputMultiplexer);
 	}
 
 	@Override
 	public void hide() {
-		// TODO Auto-generated method stub
-		
+		Gdx.input.setInputProcessor(null);
 	}
 }
