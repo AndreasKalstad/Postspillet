@@ -9,8 +9,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
-public class Pause implements Screen{
+public class Pause implements Screen {
 
 	private OrthographicCamera camera;
 	private Sprite backgroundSprite;
@@ -26,33 +28,48 @@ public class Pause implements Screen{
 	
 	private PostGame game;
 	protected boolean pause;
+	private Viewport viewport;
+	private Sprite unmuteButton;
+	private Sprite toggleMute;
 
 	public Pause(PostGame game){
 		this.game = game;
 		
-		camera = new OrthographicCamera();
-		camera.setToOrtho(false, 800, 480);
-		
 		screenWidth = Gdx.graphics.getWidth();
 		screenHeight = Gdx.graphics.getHeight();
+		
+		camera = new OrthographicCamera();
+		camera.setToOrtho(false, screenWidth, screenHeight);
+		viewport = new StretchViewport(screenWidth, screenHeight, camera);
 		
 		pauseScreen = new TextureAtlas("pauseScreen/pauseScreen.txt");
 		
 		backgroundSprite = pauseScreen.createSprite("pauseScreen_BG");
+		backgroundSprite.setSize(screenWidth, screenHeight);
 		
 //		ContinueButton
 		continueButton =new Sprite(pauseScreen.createSprite("pauseScreen_Continue"));
 		continueButton.setPosition( (screenWidth/2.5f),(screenHeight/4));
+		continueButton.setSize(screenWidth/5.51f, screenHeight/3.31f);
 		
 		menuButton = new Sprite(pauseScreen.createSprite("pauseScreen_MainMenu"));
 		menuButton.setPosition( (screenWidth/5.92f),(screenHeight/4));
-		
+		menuButton.setSize(screenWidth/5.51f, screenHeight/3.31f);
 		
 		restartButton = new Sprite(pauseScreen.createSprite("pauseScreen_Restart"));
 		restartButton.setPosition( (screenWidth/1.584f),(screenHeight/4));
+		restartButton.setSize(screenWidth/5.51f, screenHeight/3.31f);
 		
 		muteButton = new Sprite(pauseScreen.createSprite("pauseScreen_Mute"));
 		muteButton.setPosition( (screenWidth/1.24f),(screenHeight/1.352f));
+		muteButton.setSize(screenWidth/16, screenHeight/9.6f);
+		
+		unmuteButton = new Sprite(pauseScreen.createSprite("pauseScreen_Unmute"));
+		unmuteButton.setPosition( (screenWidth/1.24f),(screenHeight/1.352f));
+		unmuteButton.setSize(screenWidth/16, screenHeight/9.6f);
+		
+		toggleMute = new Sprite();
+		toggleMute = muteButton;
 	    
 	    batch = new SpriteBatch();
 	}
@@ -67,14 +84,15 @@ public class Pause implements Screen{
 		backgroundSprite.draw(batch);
 		continueButton.draw(batch);
 		menuButton.draw(batch);
-		muteButton.draw(batch);
+		toggleMute.draw(batch);
 		restartButton.draw(batch);
 		batch.end();
-
 	}
 	
 	private InputProcessor init(){
 		InputProcessor inputProcessor = new InputAdapter() {
+			private boolean muted;
+
 			public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 				if(screenX >= continueButton.getX() && screenX <= continueButton.getX() + continueButton.getWidth() && screenHeight-screenY >= continueButton.getY() && screenHeight-screenY <= continueButton.getY() + continueButton.getHeight()){
 		    		game.resume();
@@ -82,7 +100,7 @@ public class Pause implements Screen{
 			    }
 		    	
 		    	if(screenX >= menuButton.getX() && screenX <= menuButton.getX() + menuButton.getWidth() && screenHeight-screenY >= menuButton.getY() && screenHeight-screenY <= menuButton.getY() + menuButton.getHeight()){
-		    		System.out.println("Meny");
+		    		Gdx.app.exit();
 			    }
 		    	
 		    	if(screenX >= restartButton.getX() && screenX <= restartButton.getX() + restartButton.getWidth() && screenHeight-screenY >= restartButton.getY() && screenHeight-screenY <= restartButton.getY() + restartButton.getHeight()){
@@ -92,7 +110,13 @@ public class Pause implements Screen{
 			    }
 
 		    	if(screenX >= muteButton.getX() && screenX <= muteButton.getX() + muteButton.getWidth() && screenHeight-screenY >= muteButton.getY() && screenHeight-screenY <= muteButton.getY() + muteButton.getHeight()){
-		    		System.out.println("Mute"); 
+		    		if(muted){
+		    			toggleMute = muteButton;
+		    			muted = false;
+		    		} else {
+		    			toggleMute = unmuteButton;
+		    			muted = true;
+		    		}
 		    	}
 			    return false; 
 		    }
@@ -102,6 +126,7 @@ public class Pause implements Screen{
 
 	@Override
 	public void resize(int width, int height) {
+		viewport.update(width, height);
 	}
 
 	@Override

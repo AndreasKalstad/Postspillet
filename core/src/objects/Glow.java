@@ -9,11 +9,10 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -65,11 +64,6 @@ public class Glow implements Screen {
 	private Texture backgroundTexture;
 	private Sprite backgroundSprite;
 	
-	private Texture fenceBackTexture;
-	private Sprite fenceBackSprite;
-	private Texture fenceFrontTexture;
-	private Sprite fenceFrontSprite;
-	
 	private boolean spawnBag;
 	private Texture BagSpawn;
 	private TextureRegion[] bagSpawnRegion;
@@ -86,13 +80,13 @@ public class Glow implements Screen {
 	private float screenWidth;
 	private float screenHeight;
 	
-	private Texture BagDestroy;
+/*	private Texture BagDestroy;
 	private TextureRegion[] bagDestroyRegion;
 	private Animation bagDestroyAnimation;
 	private TextureRegion bagDestroyFrame;
 	private float bagDestroyMoveTime;
-	private float bagDestroyStateTime;
-	private boolean destroyBag = true;
+	private float bagDestroyStateTime; */
+	private boolean destroyBag = true; 
 	
 	private Texture bagPickUpTexture;
 	private TextureRegion[] bagPickUpRegion;
@@ -101,9 +95,10 @@ public class Glow implements Screen {
 	private float bagPickUpMoveTime;
 	private float bagPickUpStateTime;
 	private boolean bagPickUp = false;
-	private boolean destroyBag2;
+	private boolean destroyBag2 = true;
 	
-	private BitmapFont font;
+	private BitmapFont levelFont;
+	private BitmapFont scoreFont;
 	private float startTime = 0;
 	private Actor splashActor;
 	private ArrayList<BagTarget> targets;
@@ -119,39 +114,44 @@ public class Glow implements Screen {
 	int counter;
 	private boolean pickUp;
 	private boolean removeBag;
+	private StretchViewport viewport;
 	
 	public Glow(PostGame game){
 		this.game = game;
 		user = new User(); 
-		font = new BitmapFont();
-		font.setColor(Color.WHITE);
-		font.setScale(2f);
+		
+		AndroidApplicationConfiguration cfg = new AndroidApplicationConfiguration();
+		cfg.hideStatusBar = true;
+		
+		levelFont = new BitmapFont(Gdx.files.internal("fonts/showFont.fnt"), Gdx.files.internal("fonts/showFont_0.png"), false);
+		levelFont.setColor(0.02f,1f,0.325f,1f);
+		levelFont.setScale(0.3f);
+		scoreFont = new BitmapFont(Gdx.files.internal("fonts/showFont.fnt"), Gdx.files.internal("fonts/showFont_0.png"), false);
+		scoreFont.setColor(0.02f,1f,0.325f,1f);
+		scoreFont.setScale(0.6f);
 		
 		letters = new Array<LetterActor>(); 
-
-		camera = new OrthographicCamera();
-		camera.setToOrtho(false, 800, 480);
 		
 		screenWidth = Gdx.graphics.getWidth();
 		screenHeight = Gdx.graphics.getHeight();
+		
+		camera = new OrthographicCamera();
+		camera.setToOrtho(false, screenWidth, screenHeight);
+		viewport = new StretchViewport(screenWidth, screenHeight, camera);
 		
 		pauseTime = TimeUtils.millis();
 		theTime = pauseTime;
 		
 		pauseButton = new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("Play_Pause/BPause.png")))));
 		pauseButton.setScale(0.5f);
-
+		pauseButton.setPosition(screenWidth-pauseButton.getWidth(), screenHeight-pauseButton.getHeight());
+		
 		batch = new SpriteBatch();
 		 
-		backgroundTexture = new Texture(Gdx.files.internal("NewG/Bakgrunn6.png"));
-		backgroundTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-	    TextureRegion region = new TextureRegion(backgroundTexture, 0, 0, (int) screenWidth, (int) screenHeight);
+		backgroundTexture = new Texture(Gdx.files.internal("background/background8.png"));
+	    TextureRegion region = new TextureRegion(backgroundTexture);
 	    backgroundSprite = new Sprite(region);
-	    
-	    TextureRegion fenceBackRegion = new TextureRegion(fenceBackTexture, 0, 0, (int) screenWidth, (int) screenHeight);
-	    fenceBackSprite = new Sprite(fenceBackRegion);
-	    TextureRegion fenceFrontRegion = new TextureRegion(fenceFrontTexture, 0, 0, (int) screenWidth, (int) screenHeight);
-	    fenceFrontSprite = new Sprite(fenceFrontRegion);
+	    backgroundSprite.setSize(screenWidth, screenHeight);
 
 		bags = new ArrayList<BagActor>(6);
 		targets = new ArrayList<BagTarget>(6);
@@ -198,7 +198,7 @@ public class Glow implements Screen {
 
 		bagSpawnAnimation = new Animation(0.1f, bagSpawnRegion);
 		
-		//Escalator back animation
+/*		//Escalator back animation
 		BagDestroy = new Texture(Gdx.files.internal("bagDestroy/bagDestroy004.png"));
 
 		TextureRegion[][] bd = TextureRegion.split(BagDestroy, BagDestroy.getWidth() / FRAME_COLS_BAG_SPAWN, BagDestroy.getHeight() / FRAME_ROWS_BAG_SPAWN);
@@ -210,12 +210,11 @@ public class Glow implements Screen {
 			}
 		}
 
-		bagDestroyAnimation = new Animation(0.1f, bagDestroyRegion);
+		bagDestroyAnimation = new Animation(0.1f, bagDestroyRegion); */
 		
 		stage = new Stage(new StretchViewport(screenWidth, screenHeight));
 		
 		inputMultiplexer = new InputMultiplexer();
-		//game.setMultiplexer(inputMultiplexer);
 		
 		Bag exampleBag = new Bag();
 		BagActor bagActorExample = new BagActor(exampleBag, stage,0);
@@ -252,6 +251,7 @@ public class Glow implements Screen {
 	@Override
 	public void resize(int width, int height) {
 		stage.getViewport().update(width, height, true);
+		viewport.update(width, height);
 	}
 
 	@Override
@@ -289,14 +289,14 @@ public class Glow implements Screen {
 			bagSpawnFrame = bagSpawnAnimation.getKeyFrame(bagSpawnStateTime, false);
 		}
 		
-		if (bagDestroyMoveTime < bagDestroyAnimation.getAnimationDuration()) {
+		/*if (bagDestroyMoveTime < bagDestroyAnimation.getAnimationDuration()) {
 			// Speed of bag destroy
 			if(!pause && !pickUp){
 				bagDestroyStateTime += delta*2;
 				bagDestroyMoveTime += delta;
 			}
 			bagDestroyFrame = bagDestroyAnimation.getKeyFrame(bagDestroyStateTime, false);
-		}
+		} */
 		
 		if (escalatorMoveTime < escalatorAnimation.getAnimationDuration()/1.8) {
 			if(bags.size() > 1){
@@ -315,7 +315,7 @@ public class Glow implements Screen {
 		// Set scaled positions for the bags
 		if(bagValues == null){
 			double start = bagSpawnFrame.getRegionWidth()/3;
-			double bagArea = screenWidth-bagSpawnFrame.getRegionWidth()/3-bagDestroyFrame.getRegionWidth()/3;
+			double bagArea = screenWidth-bagSpawnFrame.getRegionWidth()/3-bagSpawnFrame.getRegionWidth()/3;
 			double ratio = bagArea/7;
 			bagValues = new double[] {ratio+start, ratio*2+start, ratio*3+start, ratio*4+start, ratio*5+start, ratio*6+start, ratio*7+start};
 		}
@@ -323,7 +323,10 @@ public class Glow implements Screen {
 		batch.begin();
 		backgroundSprite.draw(batch);
 		// Draw escalator
-		batch.draw(escalatorFrame, 0, screenHeight/1.90f);
+		Sprite escalatorSpriteFrame = new Sprite(escalatorFrame);
+		escalatorSpriteFrame.setSize(screenWidth, screenHeight/8);
+		escalatorSpriteFrame.setPosition(0, screenHeight/1.90f);
+		escalatorSpriteFrame.draw(batch);
 		batch.end();
 		
 		stage.act(delta);
@@ -349,12 +352,21 @@ public class Glow implements Screen {
 		}
 		
 		batch.begin();
-		batch.draw(bagSpawnFrame, 0, screenHeight-bagSpawnFrame.getRegionHeight());
-		batch.draw(bagDestroyFrame, screenWidth-bagDestroyFrame.getRegionWidth(), screenHeight-bagDestroyFrame.getRegionHeight());
+		levelFont.draw(batch, "Level "+user.getLevel(), screenWidth/2f, screenHeight/1.25f);
+		float x = scoreFont.getBounds(user.getPoints()).width/2;
+		scoreFont.draw(batch, user.getPoints(), screenWidth/2.1f-x, screenHeight/1.1f);
+		
+		Sprite bagSpriteSpawnFrame = new Sprite(bagSpawnFrame);
+		bagSpriteSpawnFrame.setSize(screenWidth/4.85f, screenHeight/2.38f);
+		bagSpriteSpawnFrame.setPosition(0, screenHeight-bagSpriteSpawnFrame.getHeight());
+		bagSpriteSpawnFrame.draw(batch);
+		//batch.draw(bagDestroyFrame, screenWidth-bagDestroyFrame.getRegionWidth(), screenHeight-bagDestroyFrame.getRegionHeight());
 		if(pickUpIndex != 0){
-			batch.draw(bagPickUpFrame, (int) bagValues[pickUpIndex-1]+(bagSize/2)-(bagPickUpFrame.getRegionWidth()/2), screenHeight-bagPickUpFrame.getRegionHeight());
+			Sprite bagSpritePickUpFrame = new Sprite(bagPickUpFrame);
+			bagSpritePickUpFrame.setSize(screenWidth/5.51f, screenHeight/2.487f);
+			bagSpritePickUpFrame.setPosition((float) bagValues[pickUpIndex-1]+(bagSize/2)-(float)(bagSpritePickUpFrame.getWidth()/2), screenHeight-bagSpritePickUpFrame.getHeight());
+			bagSpritePickUpFrame.draw(batch);
 		}
-		font.draw(batch, user.getPoints(), 400, 200);
 		batch.end(); 
 		
 		if(lastBagTime == 0){
@@ -411,8 +423,8 @@ public class Glow implements Screen {
 		if(removeBag){
 			dragAndDrop.removeTarget(targets.get(6));
 			if(destroyBag && escalatorMoveTime >= escalatorAnimation.getAnimationDuration()/1.8){
-				bagDestroyStateTime = 0f;
-				bagDestroyMoveTime = 0;
+			/*	bagDestroyStateTime = 0f;
+				bagDestroyMoveTime = 0; */
 				destroyBag = false;
 				destroyBag2 = false;
 			}
@@ -430,7 +442,8 @@ public class Glow implements Screen {
 	}
 	
 	private void destroyBag(){
-		if(bagDestroyAnimation.getKeyFrameIndex(bagDestroyStateTime) == 25 && destroyBag2 == false){
+		// bagDestroyAnimation.getKeyFrameIndex(bagDestroyStateTime) == 25 &&
+		if(destroyBag2 == false){
 			bags.get(bags.size()-1).remove();
 			bags.remove(bags.size()-1);
 			destroyBag = true;
