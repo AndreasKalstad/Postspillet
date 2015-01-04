@@ -24,7 +24,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
@@ -33,7 +32,7 @@ import draganddrop.LetterSource;
 import user.User;
 
 public class Glow implements Screen {
-	private Array<LetterActor> letters;
+	private ArrayList<LetterActor> letters;
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
 	private Stage stage;
@@ -115,6 +114,7 @@ public class Glow implements Screen {
 	private boolean pickUp;
 	private boolean removeBag;
 	private StretchViewport viewport;
+	private int spawnRate;
 	
 	public Glow(PostGame game){
 		this.game = game;
@@ -130,7 +130,7 @@ public class Glow implements Screen {
 		scoreFont.setColor(0.02f,1f,0.325f,1f);
 		scoreFont.setScale(0.6f);
 		
-		letters = new Array<LetterActor>(); 
+		letters = new ArrayList<LetterActor>(); 
 		
 		screenWidth = Gdx.graphics.getWidth();
 		screenHeight = Gdx.graphics.getHeight();
@@ -141,6 +141,7 @@ public class Glow implements Screen {
 		
 		pauseTime = TimeUtils.millis();
 		theTime = pauseTime;
+		spawnRate = 8000;
 		
 		pauseButton = new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("Play_Pause/BPause.png")))));
 		pauseButton.setScale(0.5f);
@@ -388,7 +389,7 @@ public class Glow implements Screen {
 	}
 
 	private void newBag() {
-		if (theTime - lastBagTime > 4000) {
+		if (theTime - lastBagTime > spawnRate) {
 			spawnBag();
 			escalatorMoved = true;
 			spawnBag = true;
@@ -411,7 +412,7 @@ public class Glow implements Screen {
 	}
 
 	private void newLetters() {
-		if (theTime - lastLetterTime > 3000) {
+		if (theTime - lastLetterTime > spawnRate/3) {
 			spawnLetters();
 		}
 	}
@@ -453,7 +454,7 @@ public class Glow implements Screen {
 	}
 
 	private void spawnLetters() {
-		Letter letter = new Letter();
+		Letter letter = new Letter(bags,letters);
 		LetterActor letterActor = new LetterActor(letter,stage,pause);
 		dragAndDrop.addSource(new LetterSource(letterActor, user));
         stage.addActor(letterActor);

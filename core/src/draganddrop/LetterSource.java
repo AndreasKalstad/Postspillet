@@ -25,7 +25,8 @@ public class LetterSource extends Source {
 		super(actor);
 		this.actor = actor;
 		Random ran = new Random();
-		actor.setBounds(ran.nextInt(Gdx.graphics.getWidth())-actor.getWidth()/2, ran.nextInt(Gdx.graphics.getHeight()/2)-actor.getHeight()/2, Gdx.graphics.getWidth()/6.4f, Gdx.graphics.getHeight()/6.4f);
+		actor.setSize(Gdx.graphics.getWidth()/6.4f, Gdx.graphics.getHeight()/6.4f);
+		actor.setPosition(ran.nextInt((int)(Gdx.graphics.getWidth()-actor.getWidth())), ran.nextInt((int)(Gdx.graphics.getHeight()/2-actor.getHeight()/2)));
 		this.user = user;
 	}
 
