@@ -1,0 +1,88 @@
+escalator0102.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+escalator0028
+  rotate: false
+  xy: 0, 0
+  size: 800, 141
+  orig: 800, 141
+  offset: 0, 0
+  index: -1
+escalator0029
+  rotate: false
+  xy: 800, 0
+  size: 800, 141
+  orig: 800, 141
+  offset: 0, 0
+  index: -1
+escalator0030
+  rotate: false
+  xy: 0, 141
+  size: 800, 141
+  orig: 800, 141
+  offset: 0, 0
+  index: -1
+escalator0031
+  rotate: false
+  xy: 800, 141
+  size: 800, 141
+  orig: 800, 141
+  offset: 0, 0
+  index: -1
+escalator0032
+  rotate: false
+  xy: 0, 282
+  size: 800, 141
+  orig: 800, 141
+  offset: 0, 0
+  index: -1
+escalator0033
+  rotate: false
+  xy: 800, 282
+  size: 800, 141
+  orig: 800, 141
+  offset: 0, 0
+  index: -1
+escalator0034
+  rotate: false
+  xy: 0, 423
+  size: 800, 141
+  orig: 800, 141
+  offset: 0, 0
+  index: -1
+escalator0035
+  rotate: false
+  xy: 800, 423
+  size: 800, 141
+  orig: 800, 141
+  offset: 0, 0
+  index: -1
+escalator0036
+  rotate: false
+  xy: 0, 564
+  size: 800, 141
+  orig: 800, 141
+  offset: 0, 0
+  index: -1
+escalator0037
+  rotate: false
+  xy: 800, 564
+  size: 800, 141
+  orig: 800, 141
+  offset: 0, 0
+  index: -1
+escalator0038
+  rotate: false
+  xy: 0, 705
+  size: 800, 141
+  orig: 800, 141
+  offset: 0, 0
+  index: -1
+escalator0039
+  rotate: false
+  xy: 800, 705
+  size: 800, 141
+  orig: 800, 141
+  offset: 0, 0
+  index: -1
