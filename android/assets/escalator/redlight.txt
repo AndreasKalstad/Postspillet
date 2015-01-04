@@ -1,0 +1,18 @@
+redlight.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+redLight0045
+  rotate: false
+  xy: 2, 2
+  size: 30, 29
+  orig: 800, 480
+  offset: 710, 225
+  index: -1
+redLight0046
+  rotate: false
+  xy: 2, 33
+  size: 30, 29
+  orig: 800, 480
+  offset: 710, 225
+  index: -1

@@ -1,0 +1,11 @@
+greyEdge.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+greyEdge
+  rotate: false
+  xy: 2, 2
+  size: 142, 105
+  orig: 800, 480
+  offset: 658, 187
+  index: -1
