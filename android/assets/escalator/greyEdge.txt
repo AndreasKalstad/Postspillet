@@ -4,7 +4,7 @@ filter: Linear,Linear
 repeat: none
 greyEdge
   rotate: false
-  xy: 2, 2
+  xy: 0, 0
   size: 142, 105
   orig: 800, 480
   offset: 658, 187
