@@ -1,0 +1,361 @@
+bagSpawn.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+bagSpawn0000 copy
+  rotate: false
+  xy: 0, 0
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0001 copy
+  rotate: false
+  xy: 160, 0
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0002 copy
+  rotate: false
+  xy: 320, 0
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0003 copy
+  rotate: false
+  xy: 480, 0
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0004 copy
+  rotate: false
+  xy: 640, 0
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0005 copy
+  rotate: false
+  xy: 800, 0
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0006 copy
+  rotate: false
+  xy: 960, 0
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0007 copy
+  rotate: false
+  xy: 1120, 0
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0008 copy
+  rotate: false
+  xy: 1280, 0
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0009 copy
+  rotate: false
+  xy: 1440, 0
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0010 copy
+  rotate: false
+  xy: 1600, 0
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0011 copy
+  rotate: false
+  xy: 0, 128
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0012 copy
+  rotate: false
+  xy: 160, 128
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0013 copy
+  rotate: false
+  xy: 320, 128
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0014 copy
+  rotate: false
+  xy: 480, 128
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0015 copy
+  rotate: false
+  xy: 640, 128
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0016 copy
+  rotate: false
+  xy: 800, 128
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0017 copy
+  rotate: false
+  xy: 960, 128
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0018 copy
+  rotate: false
+  xy: 1120, 128
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0019 copy
+  rotate: false
+  xy: 1280, 128
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0020 copy
+  rotate: false
+  xy: 1440, 128
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0021 copy
+  rotate: false
+  xy: 1600, 128
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0021
+  rotate: false
+  xy: 0, 256
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0022 copy
+  rotate: false
+  xy: 160, 256
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0023 copy
+  rotate: false
+  xy: 320, 256
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0024 copy
+  rotate: false
+  xy: 480, 256
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0025 copy
+  rotate: false
+  xy: 640, 256
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0026 copy
+  rotate: false
+  xy: 800, 256
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0027 copy
+  rotate: false
+  xy: 960, 256
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0028 copy
+  rotate: false
+  xy: 1120, 256
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0029 copy
+  rotate: false
+  xy: 1280, 256
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0030 copy
+  rotate: false
+  xy: 1440, 256
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0031 copy
+  rotate: false
+  xy: 1600, 256
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0032 copy
+  rotate: false
+  xy: 0, 384
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0033 copy
+  rotate: false
+  xy: 160, 384
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0034 copy
+  rotate: false
+  xy: 320, 384
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0035 copy
+  rotate: false
+  xy: 480, 384
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0036 copy
+  rotate: false
+  xy: 640, 384
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0037 copy
+  rotate: false
+  xy: 800, 384
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0038 copy
+  rotate: false
+  xy: 960, 384
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0039 copy
+  rotate: false
+  xy: 1120, 384
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0040 copy
+  rotate: false
+  xy: 1280, 384
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0041 copy
+  rotate: false
+  xy: 1440, 384
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0042 copy
+  rotate: false
+  xy: 1600, 384
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0043 copy
+  rotate: false
+  xy: 0, 512
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0044 copy
+  rotate: false
+  xy: 160, 512
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0045 copy
+  rotate: false
+  xy: 320, 512
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0046 copy
+  rotate: false
+  xy: 480, 512
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0047 copy
+  rotate: false
+  xy: 640, 512
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0048 copy
+  rotate: false
+  xy: 800, 512
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
+bagSpawn0049 copy
+  rotate: false
+  xy: 960, 512
+  size: 160, 128
+  orig: 160, 128
+  offset: 0, 0
+  index: -1
