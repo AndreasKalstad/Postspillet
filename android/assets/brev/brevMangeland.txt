@@ -1,0 +1,39 @@
+brevMangeland.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+BrevDanmark
+  rotate: false
+  xy: 0, 0
+  size: 204, 114
+  orig: 204, 114
+  offset: 0, 0
+  index: -1
+BrevNorge
+  rotate: false
+  xy: 204, 0
+  size: 204, 114
+  orig: 204, 114
+  offset: 0, 0
+  index: -1
+BrevSverige
+  rotate: false
+  xy: 408, 0
+  size: 204, 114
+  orig: 204, 114
+  offset: 0, 0
+  index: -1
+BrevTyskland
+  rotate: false
+  xy: 612, 0
+  size: 204, 114
+  orig: 204, 114
+  offset: 0, 0
+  index: -1
+Brevfinnland
+  rotate: false
+  xy: 816, 0
+  size: 204, 114
+  orig: 204, 114
+  offset: 0, 0
+  index: -1
