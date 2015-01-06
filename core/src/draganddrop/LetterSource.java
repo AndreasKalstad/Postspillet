@@ -52,6 +52,7 @@ public class LetterSource extends Source {
 			LetterActor letterActor = (LetterActor) payload.getDragActor();
 			if(bagActor.getBag().getCountry().equals(letterActor.getLetter().getNationality())){
 				user.increasePoints();
+				user.setScoreChanged(true);
 			} else {
 				resetLetter();
 			}

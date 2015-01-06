@@ -52,28 +52,28 @@ public class Letter {
 	    			r++;
 	    			numCon[0] = r;
 	    		}
-	    		if(bags.get(i).getBag().getCountry().equals("finland")){
+	    		if(bags.get(i).getBag().getCountry().equals("norway")){
 	    			levelBags[0] = bags.get(i).getBag().getLevel();
 	    			posCon[1] = i;
 	    			int r = numCon[1];
 	    			r++;
 	    			numCon[1] = r;
 	    		}
-	    		if(bags.get(i).getBag().getCountry().equals("norway")){
+	    		if(bags.get(i).getBag().getCountry().equals("sweden")){
 	    			levelBags[0] = bags.get(i).getBag().getLevel();
 	    			posCon[2] = i;
 	    			int r = numCon[2];
 	    			r++;
 	    			numCon[2] = r;
 	    		}
-	    		if(bags.get(i).getBag().getCountry().equals("sweden")){
+	    		if(bags.get(i).getBag().getCountry().equals("deutschland")){
 	    			posCon[3] = i;
 	    			levelBags[3] = bags.get(i).getBag().getLevel();
 	    			int r = numCon[3];
 	    			r++;
 	    			numCon[3] = r;
 	    		}
-	    		if(bags.get(i).getBag().getCountry().equals("deutschland")){
+	    		if(bags.get(i).getBag().getCountry().equals("finland")){
 	    			posCon[4] = i;
 	    			levelBags[4] = bags.get(i).getBag().getLevel();
 	    			int r = numCon[4];
@@ -88,22 +88,22 @@ public class Letter {
 	    			r++;
 	    			numNat[0] = r;
 	    		}
-	    		if(letters.get(i).getLetter().getNationality().equals("finland")){
+	    		if(letters.get(i).getLetter().getNationality().equals("norway")){
 	    			int r = numNat[1];
 	    			r++;
 	    			numNat[1] = r;
 	    		}
-	    		if(letters.get(i).getLetter().getNationality().equals("norway")){
+	    		if(letters.get(i).getLetter().getNationality().equals("sweden")){
 	    			int r = numNat[2];
 	    			r++;
 	    			numNat[2] = r;
 	    		}
-	    		if(letters.get(i).getLetter().getNationality().equals("sweden")){
+	    		if(letters.get(i).getLetter().getNationality().equals("deutschland")){
 	    			int r = numNat[3];
 	    			r++;
 	    			numNat[3] = r;
 	    		}
-	    		if(letters.get(i).getLetter().getNationality().equals("deutschland")){
+	    		if(letters.get(i).getLetter().getNationality().equals("finland")){
 	    			int r = numNat[4];
 	    			r++;
 	    			numNat[4] = r;
@@ -118,16 +118,19 @@ public class Letter {
     public int formula(int[] bagLevel, int[] numCon, int[] numNat, int[] posCon){
     	double[] score = new double[5];
     	for(int i = 0; i<5; i++){
-    		if(numCon[i] != 0){
+        	score[i] = (double)ran.nextInt(5)+ran.nextDouble();
+    	}
+ /*   		if(numCon[i] != 0){
     			int level = bagLevel[i];
     			int numLet = numNat[i];
     			int numBag = numCon[i];
-    			score[i] = ((((numBag*4))/((numLet+1)+(level+1)))*posCon[i])+(ran.nextInt(5))+ran.nextDouble();
+    			int posBag = posCon[i];
+    			score[i] = (((numBag*4)/(numLet+1+level+1))*(posBag+1))+ran.nextInt(5)+ran.nextDouble();
     		} else {
     			score[i] = (double)ran.nextInt(5)+ran.nextDouble();
     		}
     		System.out.println(i + ": " + score[i]);
-    	}
+    	} */
 		double balance = 0;
 		int result = 0;
     	for(int i = 0; i<5; i++){

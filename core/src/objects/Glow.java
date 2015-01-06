@@ -4,6 +4,10 @@ import java.util.ArrayList;
 
 import actors.BagActor;
 import actors.LetterActor;
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenManager;
+import aurelienribon.tweenengine.equations.Sine;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
@@ -18,6 +22,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -29,6 +34,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 import draganddrop.BagTarget;
 import draganddrop.LetterSource;
+import tween.BitmapFontAccessor;
 import user.User;
 
 public class Glow implements Screen {
@@ -51,7 +57,7 @@ public class Glow implements Screen {
 	private TextureRegion escalatorFrame;
 	private float escalatorStateTime = 0f;
 	private static final int FRAME_COLS_ESCALATOR = 2;
-	private static final int FRAME_ROWS_ESCALATOR = 20;
+	private static final int FRAME_ROWS_ESCALATOR = 14;
 	private float escalatorMoveTime = 0f;
 	private boolean escalatorMoved;
 	
@@ -70,7 +76,7 @@ public class Glow implements Screen {
 	private float bagSpawnStateTime = 0f;
 	private TextureRegion bagSpawnFrame;
 	private float bagSpawnMoveTime = 0f;
-	private static final int FRAME_COLS_BAG_SPAWN = 10;
+	private static final int FRAME_COLS_BAG_SPAWN = 11;
 	private static final int FRAME_ROWS_BAG_SPAWN = 5;
 	private static final float BAG_SPEED = 10f;
 	
@@ -115,6 +121,23 @@ public class Glow implements Screen {
 	private boolean removeBag;
 	private StretchViewport viewport;
 	private int spawnRate;
+	private Texture escalator2;
+	private int FRAME_COLS_ESCALATOR2 = 2;
+	private int FRAME_ROWS_ESCALATOR2 = 6;
+	
+	private Texture Fire;
+	private int FRAME_COLS_FIRE = 7;
+	private int FRAME_ROWS_FIRE = 8;
+	private TextureRegion[] fireRegion;
+	private double fireMoveTime = 6f;
+	private Animation fireAnimation;
+	private float fireStateTime = 0f;
+	private TextureRegion fireFrame;
+	private Texture escalatorEdgeTexture;
+	private Sprite escalatorEdgeSprite;
+	
+	private static TweenManager tweenManager;
+	Sprite s;
 	
 	public Glow(PostGame game){
 		this.game = game;
@@ -139,6 +162,9 @@ public class Glow implements Screen {
 		camera.setToOrtho(false, screenWidth, screenHeight);
 		viewport = new StretchViewport(screenWidth, screenHeight, camera);
 		
+		tweenManager = new TweenManager();
+		Tween.registerAccessor(BitmapFont.class, new BitmapFontAccessor());
+		
 		pauseTime = TimeUtils.millis();
 		theTime = pauseTime;
 		spawnRate = 8000;
@@ -153,7 +179,11 @@ public class Glow implements Screen {
 	    TextureRegion region = new TextureRegion(backgroundTexture);
 	    backgroundSprite = new Sprite(region);
 	    backgroundSprite.setSize(screenWidth, screenHeight);
-
+	    
+	    escalatorEdgeTexture = new Texture(Gdx.files.internal("escalator/greyEdge.png"));
+	    TextureRegion escalatorEdgeRegion = new TextureRegion(escalatorEdgeTexture);
+	    escalatorEdgeSprite = new Sprite(escalatorEdgeRegion);
+	    
 		bags = new ArrayList<BagActor>(6);
 		targets = new ArrayList<BagTarget>(6);
 		
@@ -172,21 +202,43 @@ public class Glow implements Screen {
 		bagPickUpAnimation = new Animation(0.1f, bagPickUpRegion);
 
 		//Escalator back animation
-		escalator = new Texture(Gdx.files.internal("NewG/escalator009.png"));
+		escalator = new Texture(Gdx.files.internal("escalator/escalator0101.png"));
+		escalator2 = new Texture(Gdx.files.internal("escalator/escalator0102.png"));
 
 		TextureRegion[][] tmp = TextureRegion.split(escalator, escalator.getWidth() / FRAME_COLS_ESCALATOR, escalator.getHeight() / FRAME_ROWS_ESCALATOR);
-		escalatorRegion = new TextureRegion[FRAME_COLS_ESCALATOR * FRAME_ROWS_ESCALATOR];
+		TextureRegion[][] tmp2 = TextureRegion.split(escalator2, escalator2.getWidth() / FRAME_COLS_ESCALATOR2, escalator2.getHeight() / FRAME_ROWS_ESCALATOR2);
+		escalatorRegion = new TextureRegion[(FRAME_COLS_ESCALATOR * FRAME_ROWS_ESCALATOR) + (FRAME_COLS_ESCALATOR2 * FRAME_ROWS_ESCALATOR2)];
 		int index = 0;
 		for (int i = 0; i < FRAME_ROWS_ESCALATOR; i++) {
 			for (int j = 0; j < FRAME_COLS_ESCALATOR; j++) {
 				escalatorRegion[index++] = tmp[i][j];
 			}
 		}
+		for (int i = 0; i < FRAME_ROWS_ESCALATOR2; i++) {
+			for (int j = 0; j < FRAME_COLS_ESCALATOR2; j++) {
+				escalatorRegion[index++] = tmp2[i][j];
+			}
+		}
 
 		escalatorAnimation = new Animation(0.1f, escalatorRegion);
 		
+		Fire = new Texture(Gdx.files.internal("fire/fire.png"));
+		
+		TextureRegion[][] fire = TextureRegion.split(Fire, Fire.getWidth() / FRAME_COLS_FIRE, Fire.getHeight() / FRAME_ROWS_FIRE);
+		fireRegion = new TextureRegion[FRAME_COLS_FIRE * FRAME_ROWS_FIRE];
+		int fr = 0;
+		for (int i = 0; i < FRAME_ROWS_FIRE; i++) {
+			for (int j = 0; j < FRAME_COLS_FIRE; j++) {
+				fireRegion[fr++] = fire[i][j];
+			}
+		}
+
+		fireAnimation = new Animation(0.1f, fireRegion);
+		
+		fireFrame = fireAnimation.getKeyFrame(fireStateTime, true);
+		
 		//Escalator back animation
-		BagSpawn = new Texture(Gdx.files.internal("bagSpawn/bagSpawn004.png"));
+		BagSpawn = new Texture(Gdx.files.internal("bagSpawn/bagSpawn.png"));
 		
 		TextureRegion[][] bs = TextureRegion.split(BagSpawn, BagSpawn.getWidth() / FRAME_COLS_BAG_SPAWN, BagSpawn.getHeight() / FRAME_ROWS_BAG_SPAWN);
 		bagSpawnRegion = new TextureRegion[FRAME_COLS_BAG_SPAWN * FRAME_ROWS_BAG_SPAWN];
@@ -248,6 +300,21 @@ public class Glow implements Screen {
 		};
 		return inputProcessor;
 	}
+	
+	/*private InputProcessor initA(){
+		InputProcessor inputProcessor = new InputAdapter() {
+		    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		    	float d = MathUtils.random() * 0.5f + 0.5f;   // duration
+		    	Tween.to(s, SpriteAccessor.SCALE, d)
+		            .target(1.2f, 1.2f)
+		            .ease(Sine.INOUT)
+		            .repeatYoyo(1, 0)
+		            .start(tweenManager);
+		    	return false;
+		    }
+		};
+		return inputProcessor;
+	} */
 
 	@Override
 	public void resize(int width, int height) {
@@ -262,6 +329,8 @@ public class Glow implements Screen {
 		camera.update();
 
 		deltaTime = delta;
+		
+		tweenManager.update(delta);
 		
 		if((bagPickUpAnimation.getKeyFrameIndex(bagPickUpStateTime) == 38 || bagPickUpAnimation.getKeyFrameIndex(bagPickUpStateTime) == 0)){
 			theTime += 18;
@@ -290,15 +359,6 @@ public class Glow implements Screen {
 			bagSpawnFrame = bagSpawnAnimation.getKeyFrame(bagSpawnStateTime, false);
 		}
 		
-		/*if (bagDestroyMoveTime < bagDestroyAnimation.getAnimationDuration()) {
-			// Speed of bag destroy
-			if(!pause && !pickUp){
-				bagDestroyStateTime += delta*2;
-				bagDestroyMoveTime += delta;
-			}
-			bagDestroyFrame = bagDestroyAnimation.getKeyFrame(bagDestroyStateTime, false);
-		} */
-		
 		if (escalatorMoveTime < escalatorAnimation.getAnimationDuration()/1.8) {
 			if(bags.size() > 1){
 				// Speed of escalator
@@ -313,6 +373,18 @@ public class Glow implements Screen {
 			escalatorFrame = escalatorAnimation.getKeyFrame(escalatorStateTime, true);
 		}
 		
+		if (fireMoveTime < fireAnimation.getAnimationDuration()) {
+			// Speed of fire
+			if(!pause && !pickUp){
+				fireStateTime += delta*2;
+			}
+			if(!pause){
+				// Duration of fire
+				fireMoveTime += delta;
+			}
+			fireFrame = fireAnimation.getKeyFrame(fireStateTime, true);
+		}
+		
 		// Set scaled positions for the bags
 		if(bagValues == null){
 			double start = bagSpawnFrame.getRegionWidth()/3;
@@ -325,9 +397,16 @@ public class Glow implements Screen {
 		backgroundSprite.draw(batch);
 		// Draw escalator
 		Sprite escalatorSpriteFrame = new Sprite(escalatorFrame);
-		escalatorSpriteFrame.setSize(screenWidth, screenHeight/8);
-		escalatorSpriteFrame.setPosition(0, screenHeight/1.90f);
+		escalatorSpriteFrame.setSize(screenWidth, screenHeight/4);
+		escalatorSpriteFrame.setPosition(0, screenHeight/2.4f);
 		escalatorSpriteFrame.draw(batch);
+		Sprite fireSpriteFrame = new Sprite(fireFrame);
+		fireSpriteFrame.setSize(screenWidth/5, screenHeight/4);
+		fireSpriteFrame.setPosition(screenWidth-fireSpriteFrame.getWidth(), screenHeight/1.69f);
+		fireSpriteFrame.draw(batch);
+		escalatorEdgeSprite.draw(batch);
+		escalatorEdgeSprite.setSize(screenWidth/5, screenHeight/5);
+		escalatorEdgeSprite.setPosition(screenWidth-escalatorEdgeSprite.getWidth(), screenHeight/2.42f);
 		batch.end();
 		
 		stage.act(delta);
@@ -352,22 +431,32 @@ public class Glow implements Screen {
 			}
 		}
 		
+		if(user.isScoreChanged()) {
+			float d = 0.4f;   // duration
+	    	Tween.to(scoreFont, BitmapFontAccessor.SCALE, d)
+	            .target(1f, 1f)
+	            .ease(Sine.INOUT)
+	            .repeatYoyo(1, 0)
+	            .start(tweenManager);
+			user.setScoreChanged(false);
+		}
+		
 		batch.begin();
 		levelFont.draw(batch, "Level "+user.getLevel(), screenWidth/2f, screenHeight/1.25f);
 		float x = scoreFont.getBounds(user.getPoints()).width/2;
 		scoreFont.draw(batch, user.getPoints(), screenWidth/2.1f-x, screenHeight/1.1f);
 		
 		Sprite bagSpriteSpawnFrame = new Sprite(bagSpawnFrame);
-		bagSpriteSpawnFrame.setSize(screenWidth/4.85f, screenHeight/2.38f);
-		bagSpriteSpawnFrame.setPosition(0, screenHeight-bagSpriteSpawnFrame.getHeight());
+		bagSpriteSpawnFrame.setSize(screenWidth/5f, screenHeight/4f);
+		bagSpriteSpawnFrame.setPosition(0, screenHeight/1.8f);
 		bagSpriteSpawnFrame.draw(batch);
-		//batch.draw(bagDestroyFrame, screenWidth-bagDestroyFrame.getRegionWidth(), screenHeight-bagDestroyFrame.getRegionHeight());
 		if(pickUpIndex != 0){
 			Sprite bagSpritePickUpFrame = new Sprite(bagPickUpFrame);
 			bagSpritePickUpFrame.setSize(screenWidth/5.51f, screenHeight/2.487f);
 			bagSpritePickUpFrame.setPosition((float) bagValues[pickUpIndex-1]+(bagSize/2)-(float)(bagSpritePickUpFrame.getWidth()/2), screenHeight-bagSpritePickUpFrame.getHeight());
 			bagSpritePickUpFrame.draw(batch);
 		}
+		s.draw(batch);
 		batch.end(); 
 		
 		if(lastBagTime == 0){
@@ -412,7 +501,7 @@ public class Glow implements Screen {
 	}
 
 	private void newLetters() {
-		if (theTime - lastLetterTime > spawnRate/3) {
+		if (theTime - lastLetterTime > spawnRate/2) {
 			spawnLetters();
 		}
 	}
@@ -445,6 +534,8 @@ public class Glow implements Screen {
 	private void destroyBag(){
 		// bagDestroyAnimation.getKeyFrameIndex(bagDestroyStateTime) == 25 &&
 		if(destroyBag2 == false){
+			fireStateTime = 0;
+			fireMoveTime = 0;
 			bags.get(bags.size()-1).remove();
 			bags.remove(bags.size()-1);
 			destroyBag = true;
@@ -496,6 +587,7 @@ public class Glow implements Screen {
 	public void show() {
 		inputMultiplexer.addProcessor(stage);
 		inputMultiplexer.addProcessor(initPause());
+		//inputMultiplexer.addProcessor(initA());
 		Gdx.input.setInputProcessor(inputMultiplexer);
 	}
 

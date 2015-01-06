@@ -97,6 +97,12 @@ eclipse {
     }
 }
 
+project(":android") {
+    dependencies {
+        compile fileTree(dir: '../libs', include: '*.jar')
+    }
+}
+
 // sets up the Android Idea project, using the old Ant based build.
 idea {
     module {

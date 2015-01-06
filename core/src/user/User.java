@@ -4,6 +4,7 @@ public class User {
 	private int points;
 	private int level;
 	private int[] range = {5};
+	private boolean scoreChanged;
 	
 	public User(){
 		points = 0;
@@ -33,5 +34,13 @@ public class User {
 
 	public int getRange() {
 		return range[level];
+	}
+	
+	public boolean isScoreChanged() {
+		return scoreChanged;
+	}
+	
+	public void setScoreChanged(boolean scoreChanged) {
+		this.scoreChanged = scoreChanged;
 	}
 }
