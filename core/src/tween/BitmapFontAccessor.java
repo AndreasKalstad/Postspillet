@@ -15,11 +15,11 @@ public class BitmapFontAccessor implements TweenAccessor<BitmapFont> {
 	        case POS_XY:                 
 	        	returnValues[0] = target.getCapHeight();                
 	        	//returnValues[1] = target.getY();                 
-	        	return 2;             
+	        	return 1;             
 	        case SCALE:                 
 	        	returnValues[0] = target.getScaleX();    
 	        	//returnValues[1] = target.getScaleY(); 
-	        	return 1; 
+	        	return 2; 
 	        }
  
         assert false;

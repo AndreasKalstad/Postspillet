@@ -118,19 +118,8 @@ public class Letter {
     public int formula(int[] bagLevel, int[] numCon, int[] numNat, int[] posCon){
     	double[] score = new double[5];
     	for(int i = 0; i<5; i++){
-        	score[i] = (double)ran.nextInt(5)+ran.nextDouble();
+    		 score[i] = (double)ran.nextInt(5)+ran.nextDouble();
     	}
- /*   		if(numCon[i] != 0){
-    			int level = bagLevel[i];
-    			int numLet = numNat[i];
-    			int numBag = numCon[i];
-    			int posBag = posCon[i];
-    			score[i] = (((numBag*4)/(numLet+1+level+1))*(posBag+1))+ran.nextInt(5)+ran.nextDouble();
-    		} else {
-    			score[i] = (double)ran.nextInt(5)+ran.nextDouble();
-    		}
-    		System.out.println(i + ": " + score[i]);
-    	} */
 		double balance = 0;
 		int result = 0;
     	for(int i = 0; i<5; i++){

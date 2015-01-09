@@ -6,7 +6,6 @@ import actors.BagActor;
 import actors.LetterActor;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenManager;
-import aurelienribon.tweenengine.equations.Sine;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
@@ -22,7 +21,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -76,12 +74,12 @@ public class Glow implements Screen {
 	private float bagSpawnStateTime = 0f;
 	private TextureRegion bagSpawnFrame;
 	private float bagSpawnMoveTime = 0f;
-	private static final int FRAME_COLS_BAG_SPAWN = 11;
-	private static final int FRAME_ROWS_BAG_SPAWN = 5;
+	private static final int FRAME_COLS_BAG_SPAWN = 2;
+	private static final int FRAME_ROWS_BAG_SPAWN = 25; 
 	private static final float BAG_SPEED = 10f;
 	
 	private static final int FRAME_COLS_BAG_PICKUP = 13;
-	private static final int FRAME_ROWS_BAG_PICKUP = 3;
+	private static final int FRAME_ROWS_BAG_PICKUP = 3; 
 	private float screenWidth;
 	private float screenHeight;
 	
@@ -96,9 +94,9 @@ public class Glow implements Screen {
 	private Texture bagPickUpTexture;
 	private TextureRegion[] bagPickUpRegion;
 	private Animation bagPickUpAnimation;
-	private TextureRegion bagPickUpFrame;
-	private float bagPickUpMoveTime;
-	private float bagPickUpStateTime;
+	//private TextureRegion bagPickUpFrame;
+	//private float bagPickUpMoveTime;
+	//private float bagPickUpStateTime;
 	private boolean bagPickUp = false;
 	private boolean destroyBag2 = true;
 	
@@ -107,7 +105,6 @@ public class Glow implements Screen {
 	private float startTime = 0;
 	private Actor splashActor;
 	private ArrayList<BagTarget> targets;
-	private int pickUpIndex;
 	
 	private float bagSize;
 	private boolean pause;
@@ -137,7 +134,14 @@ public class Glow implements Screen {
 	private Sprite escalatorEdgeSprite;
 	
 	private static TweenManager tweenManager;
-	Sprite s;
+	private BagPickUp[] bgu;
+	//private boolean[] pickUps;
+	private boolean noPickUp;
+	private boolean[] bagPickUpIndex;
+	//private int pickUpIndex;
+	private boolean remove[];
+	private boolean more;
+	private int removeCounter;
 	
 	public Glow(PostGame game){
 		this.game = game;
@@ -154,6 +158,9 @@ public class Glow implements Screen {
 		scoreFont.setScale(0.6f);
 		
 		letters = new ArrayList<LetterActor>(); 
+		bgu = new BagPickUp[7];
+		remove = new boolean[6];
+		bagPickUpIndex = new boolean[6];
 		
 		screenWidth = Gdx.graphics.getWidth();
 		screenHeight = Gdx.graphics.getHeight();
@@ -332,12 +339,10 @@ public class Glow implements Screen {
 		
 		tweenManager.update(delta);
 		
-		if((bagPickUpAnimation.getKeyFrameIndex(bagPickUpStateTime) == 38 || bagPickUpAnimation.getKeyFrameIndex(bagPickUpStateTime) == 0)){
+		if(pickUp != true){
 			theTime += 18;
-			pickUp = false;
-		} else {
-			pickUp = true;
 		}
+
 		
 		if(pause){
 			pauseTime = theTime;
@@ -397,7 +402,7 @@ public class Glow implements Screen {
 		backgroundSprite.draw(batch);
 		// Draw escalator
 		Sprite escalatorSpriteFrame = new Sprite(escalatorFrame);
-		escalatorSpriteFrame.setSize(screenWidth, screenHeight/4);
+		escalatorSpriteFrame.setSize(screenWidth, screenHeight/3.5f);
 		escalatorSpriteFrame.setPosition(0, screenHeight/2.4f);
 		escalatorSpriteFrame.draw(batch);
 		Sprite fireSpriteFrame = new Sprite(fireFrame);
@@ -407,6 +412,10 @@ public class Glow implements Screen {
 		escalatorEdgeSprite.draw(batch);
 		escalatorEdgeSprite.setSize(screenWidth/5, screenHeight/5);
 		escalatorEdgeSprite.setPosition(screenWidth-escalatorEdgeSprite.getWidth(), screenHeight/2.42f);
+		Sprite bagSpriteSpawnFrame = new Sprite(bagSpawnFrame);
+		bagSpriteSpawnFrame.setSize(screenWidth/8f, screenHeight/6.5f);
+		bagSpriteSpawnFrame.setPosition(0, screenHeight/1.65f);
+		bagSpriteSpawnFrame.draw(batch);
 		batch.end();
 		
 		stage.act(delta);
@@ -414,28 +423,42 @@ public class Glow implements Screen {
 		
 		for(int i = 0; i<bags.size(); i++){
 			if(bags.get(i).getBag().isFull()){
-				dragAndDrop.removeTarget(targets.get(i));
-				pickUpIndex = i;
-				if(!bagPickUp){
-					bagPickUpStateTime = 0;
-					bagPickUpMoveTime = 0;
-					bagPickUp = true;
+				pickUp = true;
+				if(bgu[i] == null){
+					System.out.println("FUU  " + i);
+					BagPickUp bguObject = new BagPickUp(0, 0, bagPickUpAnimation);
+					bgu[i] = bguObject;
+					dragAndDrop.removeTarget(targets.get(i));
+					bagPickUpIndex[i] = true;
+					remove[i] = true;
 				}
-				if(bagSpawnAnimation.getKeyFrameIndex(bagPickUpStateTime) == 20){ 
-					bags.get(i).remove();
-					bags.remove(i);
-				}
-				if(bagPickUpMoveTime > bagPickUpAnimation.getAnimationDuration()){
-					bagPickUp = false;
+			}
+		}
+
+		for(int i = 0; i<bagPickUpIndex.length; i++){ 
+			if(bagPickUpIndex[i] = true){
+				if(bgu[i] != null){
+					if(remove[i]){
+						if(bgu[i].getBagPickUpAnimation().getKeyFrameIndex(bgu[i].getBagPickUpStateTime()) == 20){
+							bags.get(i).remove(); 
+							bags.remove(i);
+							remove[i] = false;
+						}
+					}
+					if(bgu[i].getBagPickUpMoveTime() > bgu[i].getBagPickUpAnimation().getAnimationDuration()){
+						System.out.println("LUUL");
+						bgu[i] = null;
+						pickUp = false; 
+						bagPickUpIndex[i] = false;
+					}
 				}
 			}
 		}
 		
 		if(user.isScoreChanged()) {
-			float d = 0.4f;   // duration
+			float d = 0.2f;   // duration
 	    	Tween.to(scoreFont, BitmapFontAccessor.SCALE, d)
-	            .target(1f, 1f)
-	            .ease(Sine.INOUT)
+	            .targetRelative(0.1f)
 	            .repeatYoyo(1, 0)
 	            .start(tweenManager);
 			user.setScoreChanged(false);
@@ -443,37 +466,37 @@ public class Glow implements Screen {
 		
 		batch.begin();
 		levelFont.draw(batch, "Level "+user.getLevel(), screenWidth/2f, screenHeight/1.25f);
-		float x = scoreFont.getBounds(user.getPoints()).width/2;
+		float x = scoreFont.getBounds(user.getPoints()).width/2; 
 		scoreFont.draw(batch, user.getPoints(), screenWidth/2.1f-x, screenHeight/1.1f);
-		
-		Sprite bagSpriteSpawnFrame = new Sprite(bagSpawnFrame);
-		bagSpriteSpawnFrame.setSize(screenWidth/5f, screenHeight/4f);
-		bagSpriteSpawnFrame.setPosition(0, screenHeight/1.8f);
-		bagSpriteSpawnFrame.draw(batch);
-		if(pickUpIndex != 0){
-			Sprite bagSpritePickUpFrame = new Sprite(bagPickUpFrame);
-			bagSpritePickUpFrame.setSize(screenWidth/5.51f, screenHeight/2.487f);
-			bagSpritePickUpFrame.setPosition((float) bagValues[pickUpIndex-1]+(bagSize/2)-(float)(bagSpritePickUpFrame.getWidth()/2), screenHeight-bagSpritePickUpFrame.getHeight());
-			bagSpritePickUpFrame.draw(batch);
+		for(int i = 0; i < bgu.length; i++){
+			if(bgu[i] != null){
+				Sprite bagSpritePickUpFrame = new Sprite(bgu[i].getBagPickUpFrame());
+				bagSpritePickUpFrame.setSize(screenWidth/5.51f, screenHeight/2.487f);
+				bagSpritePickUpFrame.setPosition((float) bagValues[i]+(bagSize/2)-(float)(bagSpritePickUpFrame.getWidth()/2), screenHeight-bagSpritePickUpFrame.getHeight());
+				bagSpritePickUpFrame.draw(batch);
+			}
 		}
-		s.draw(batch);
 		batch.end(); 
 		
 		if(lastBagTime == 0){
 			lastBagTime = theTime;
 		}
-
+		
 		newBag();
 		newLetters();
 		
-		if (bagPickUpMoveTime < bagPickUpAnimation.getAnimationDuration()) {
-			// Speed of bag spawn
-			if(!pause && escalatorMoveTime > escalatorAnimation.getAnimationDuration()/1.8){
-				bagPickUpStateTime += delta; 
-				bagPickUpMoveTime += delta;
+		// Speed of bag spawn
+		if(!pause && escalatorMoveTime > escalatorAnimation.getAnimationDuration()/1.8){
+			for(int i = 0; i < bgu.length; i++){
+				if(bgu[i] != null){
+					float stateTime = bgu[i].getBagPickUpStateTime();
+					float moveTime = bgu[i].getBagPickUpMoveTime();
+					stateTime += delta;
+					moveTime += delta;
+					bgu[i].setBagPickUpStateTime(stateTime);
+					bgu[i].setBagPickUpMoveTime(moveTime);
+				}
 			}
-			
-			bagPickUpFrame = bagPickUpAnimation.getKeyFrame(bagPickUpStateTime, false);
 		}
 	}
 
@@ -501,7 +524,7 @@ public class Glow implements Screen {
 	}
 
 	private void newLetters() {
-		if (theTime - lastLetterTime > spawnRate/2) {
+		if (theTime - lastLetterTime > spawnRate/3) {
 			spawnLetters();
 		}
 	}
@@ -513,8 +536,6 @@ public class Glow implements Screen {
 		if(removeBag){
 			dragAndDrop.removeTarget(targets.get(6));
 			if(destroyBag && escalatorMoveTime >= escalatorAnimation.getAnimationDuration()/1.8){
-			/*	bagDestroyStateTime = 0f;
-				bagDestroyMoveTime = 0; */
 				destroyBag = false;
 				destroyBag2 = false;
 			}
