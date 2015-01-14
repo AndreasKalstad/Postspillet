@@ -1,1 +1,0 @@
-actor.setSize(Gdx.graphics.getWidth()/5.5f, Gdx.graphics.getHeight()/5.9f);

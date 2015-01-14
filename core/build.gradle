@@ -5,17 +5,7 @@ sourceCompatibility = 1.6
 
 sourceSets.main.java.srcDirs = [ "src/" ]
 
+
 eclipse.project {
     name = appName + "-core"
-}
-
-compile fileTree(dir: '../libs', include: '*.jar')
-
-project(":core") {
-   ...
-
-    dependencies {
-        ...
-        compile fileTree(dir: '../libs', include: '*.jar')
-    }
 }

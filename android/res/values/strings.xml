@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Glow</string>
-
+    <string name="app_name">Sort it!</string>
+	<integer name="google_play_services_version">6587000</integer>
+	<string name="app_id">1056240957724</string>
+	<string name="achievement_score_100_points">CgkInPL35t4eEAIQAQ</string>
+	<string name="achievement_score_200">CgkInPL35t4eEAIQAg</string>
+	<string name="achievement_score_500">CgkInPL35t4eEAIQAw</string>
+	<string name="achievement_score_1000">CgkInPL35t4eEAIQBA</string>
+	<string name="achievement_score_10000">CgkInPL35t4eEAIQBQ</string>
+	<string name="leaderboard_leaderboard">CgkInPL35t4eEAIQBw</string>
+	<string name="event_leaderboard">CgkInPL35t4eEAIQBg</string>
+	<string name="signin_failure">"Sign in failed"</string>
+	<string name="signin_other_error">"Sign in failed"</string>
 </resources>

@@ -12,18 +12,18 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/options"
+        android:id="@+id/leaderboard"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/startgame"
         android:layout_centerHorizontal="true"
-        android:text="Options" />
+        android:text="Leaderboard" />
 
     <Button
         android:id="@+id/credit" 
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/options"
+        android:layout_below="@+id/leaderboard"
         android:layout_centerHorizontal="true"
         android:text="Credit" />
 
