@@ -12,7 +12,7 @@ public class PostGame extends Game {
     public void create() {
         glow = new Glow(this);
         pause = new Pause(this);
-        setScreen(glow);              
+        setScreen(glow);
     }
    
    public Screen getPauseScreen(){

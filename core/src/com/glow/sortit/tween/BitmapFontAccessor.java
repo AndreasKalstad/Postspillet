@@ -1,7 +1,6 @@
 package com.glow.sortit.tween;
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 
 import aurelienribon.tweenengine.TweenAccessor;
 

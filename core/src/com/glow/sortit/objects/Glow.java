@@ -2,10 +2,9 @@ package com.glow.sortit.objects;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.glow.sortit.actors.BagActor;
 import com.glow.sortit.actors.LetterActor;
-import aurelienribon.tweenengine.Tween;
-import aurelienribon.tweenengine.TweenManager;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
@@ -24,17 +23,21 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
+import com.glow.sortit.animations.EscalatorAnimation;
 import com.glow.sortit.draganddrop.BagTarget;
 import com.glow.sortit.draganddrop.LetterSource;
 import com.glow.sortit.tween.BitmapFontAccessor;
 import com.glow.sortit.user.User;
 
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenManager;
+
 public class Glow implements Screen {
+    private Actor backgroundActor;
     private ArrayList<LetterActor> letters;
     private OrthographicCamera camera;
     private SpriteBatch batch;
@@ -48,7 +51,7 @@ public class Glow implements Screen {
     private long lastBagTime;
     private long lastLetterTime;
 
-    private Animation escalatorAnimation;
+    private EscalatorAnimation escalatorAnimation;
     private Texture escalator;
     private TextureRegion[] escalatorRegion;
     private TextureRegion escalatorFrame;
@@ -62,9 +65,6 @@ public class Glow implements Screen {
 
     private User user;
 
-    private Texture backgroundTexture;
-    private Sprite backgroundSprite;
-
     private Texture BagSpawn;
     private TextureRegion[] bagSpawnRegion;
     private Animation bagSpawnAnimation;
@@ -77,8 +77,8 @@ public class Glow implements Screen {
 
     private static final int FRAME_COLS_BAG_PICKUP = 13;
     private static final int FRAME_ROWS_BAG_PICKUP = 3;
-    private float screenWidth;
-    private float screenHeight;
+    public float screenWidth;
+    public float screenHeight;
     private boolean destroyBag = true;
 
     private Texture bagPickUpTexture;
@@ -98,7 +98,6 @@ public class Glow implements Screen {
 
     private PostGame game;
     private InputMultiplexer inputMultiplexer;
-    int counter;
     private boolean pickUp;
     private boolean removeBag;
     private StretchViewport viewport;
@@ -167,11 +166,6 @@ public class Glow implements Screen {
 
         batch = new SpriteBatch();
 
-        backgroundTexture = new Texture(Gdx.files.internal("background/background8.png"));
-        TextureRegion region = new TextureRegion(backgroundTexture);
-        backgroundSprite = new Sprite(region);
-        backgroundSprite.setSize(screenWidth, screenHeight);
-
         escalatorEdgeTexture = new Texture(Gdx.files.internal("escalator/greyEdge.png"));
         TextureRegion escalatorEdgeRegion = new TextureRegion(escalatorEdgeTexture);
         escalatorEdgeSprite = new Sprite(escalatorEdgeRegion);
@@ -211,8 +205,7 @@ public class Glow implements Screen {
                 escalatorRegion[index++] = tmp2[i][j];
             }
         }
-
-        escalatorAnimation = new Animation(0.1f, escalatorRegion);
+        escalatorAnimation = new EscalatorAnimation(new Animation(0.1f, escalatorRegion), screenWidth, screenHeight);
 
         Fire = new Texture(Gdx.files.internal("fire/fire.png"));
 
@@ -246,21 +239,27 @@ public class Glow implements Screen {
         inputMultiplexer = new InputMultiplexer();
 
         dragAndDrop = new DragAndDrop();
-        dragAndDrop.setDragActorPosition(-(Gdx.graphics.getWidth()/6.4f)/2, (Gdx.graphics.getHeight()/6.4f)/2);
 
         splashActor = new Actor();
         Image splashSprite = new Image(new Texture(Gdx.files.internal("NewG/GetRdy.png")));
         splashActor = splashSprite;
         splashActor.setPosition(300, 300);
         splashActor.setScale(0.5f);
-        stage.addActor(splashActor);
 
+        Image backgroundImage = new Image(new Texture(Gdx.files.internal("background/background8.png")));
+        backgroundImage.setSize(screenWidth, screenHeight);
+        backgroundActor = backgroundImage;
+
+        stage.addActor(splashActor);
         stage.addActor(pauseButton);
+        stage.addActor(backgroundActor);
+        stage.addActor(escalatorAnimation);
     }
 
     private InputProcessor initPause(){
         InputProcessor inputProcessor = new InputAdapter() {
             public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+                System.out.println(screenX + " | " + screenY);
                 if(screenX >= pauseButton.getX() && screenX <= pauseButton.getX() + pauseButton.getWidth() && screenHeight-screenY >= pauseButton.getY() && screenHeight-screenY <= pauseButton.getY() + pauseButton.getHeight()){
                     if(pause == false) {
                         pause();
@@ -277,6 +276,9 @@ public class Glow implements Screen {
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
         viewport.update(width, height);
+        screenWidth = width;
+        screenHeight = height;
+        screenHeight = height;
     }
 
     @Override
@@ -314,22 +316,22 @@ public class Glow implements Screen {
         }
 
         //Check if bag pick up is queued
-        if (escalatorMoveTime >= escalatorAnimation.getAnimationDuration()/1.8 && pickUp == true) {
+        if (escalatorMoveTime >= escalatorAnimation.getAnimation().getAnimationDuration()/1.8 && pickUp == true) {
             pickUpQueue = true;
         } else {
             pickUpQueue = false;
         }
 
-        if (escalatorMoveTime < escalatorAnimation.getAnimationDuration()/1.8) {
+        if (escalatorMoveTime < escalatorAnimation.getAnimation().getAnimationDuration()/1.8) {
             if(bags.size() > 0){
                 if(!pause && !pickUpQueue){
                     // Speed of escalator
                     escalatorStateTime += delta*4.4;
+                    escalatorAnimation.setEscalatorStateTime(escalatorStateTime);
                     // Duration of escalator movement
                     escalatorMoveTime += delta*1.8;
                 }
             }
-            escalatorFrame = escalatorAnimation.getKeyFrame(escalatorStateTime, true);
         }
 
         if (fireMoveTime < fireAnimation.getAnimationDuration()) {
@@ -351,13 +353,13 @@ public class Glow implements Screen {
             bagValues = new double[] {ratio-bagSize, ratio*2-bagSize, ratio*3-bagSize, ratio*4-bagSize, ratio*5-bagSize, ratio*6-bagSize, ratio*7-bagSize};
         }
 
+        newBag();
+        newLetters();
+
+        stage.act(delta);
+        stage.draw();
+
         batch.begin();
-        backgroundSprite.draw(batch);
-        // Draw escalator
-        Sprite escalatorSpriteFrame = new Sprite(escalatorFrame);
-        escalatorSpriteFrame.setSize(screenWidth, screenHeight/3.5f);
-        escalatorSpriteFrame.setPosition(0, screenHeight/2.4f);
-        escalatorSpriteFrame.draw(batch);
         Sprite fireSpriteFrame = new Sprite(fireFrame);
         fireSpriteFrame.setSize(screenWidth/5, screenHeight/4);
         fireSpriteFrame.setPosition(screenWidth-fireSpriteFrame.getWidth(), screenHeight/1.69f);
@@ -370,9 +372,6 @@ public class Glow implements Screen {
         bagSpriteSpawnFrame.setPosition(0, screenHeight/1.65f);
         bagSpriteSpawnFrame.draw(batch);
         batch.end();
-
-        stage.act(delta);
-        stage.draw();
 
         for(int i = 0; i<bags.size(); i++){
             if(bags.get(i).getBag().isFull()){
@@ -444,9 +443,6 @@ public class Glow implements Screen {
             lastBagTime = theTime;
         }
 
-        newBag();
-        newLetters();
-
         if(!pause && pickUpQueue){
             for(int i = 0; i < bgu.length; i++){
                 if(bgu[i] != null){
@@ -475,7 +471,6 @@ public class Glow implements Screen {
             spawnBag();
             lastBagTime = theTime;
             escalatorMoveTime = 0f;
-            addBagStage();
             bagSpawnStateTime = 0f;
             bagSpawnMoveTime = 0f;
         }
@@ -497,7 +492,7 @@ public class Glow implements Screen {
         }
         if(removeBag){
             dragAndDrop.removeTarget(targets.get(6));
-            if(destroyBag && escalatorMoveTime >= escalatorAnimation.getAnimationDuration()/1.8){
+            if(destroyBag && escalatorMoveTime >= escalatorAnimation.getAnimation().getAnimationDuration()/1.8){
                 destroyBag = false;
                 destroyBag2 = false;
             }
@@ -528,7 +523,7 @@ public class Glow implements Screen {
 
     private void spawnLetters() {
         Letter letter = new Letter();
-        LetterActor letterActor = new LetterActor(letter,stage,pause);
+        LetterActor letterActor = new LetterActor(letter,stage);
         dragAndDrop.addSource(new LetterSource(letterActor, user, dragAndDrop));
         stage.addActor(letterActor);
         letters.add(letterActor);
@@ -537,15 +532,12 @@ public class Glow implements Screen {
 
     private void spawnBag() {
         Bag bag = new Bag(bags, letters);
-        bagActor = new BagActor(bag, stage,-bagSpawnFrame.getRegionWidth());
+        bagActor = new BagActor(bag,-bagSpawnFrame.getRegionWidth(), screenWidth, screenHeight);
+        stage.addActor(bagActor);
         bags.add(0, bagActor);
         BagTarget bagTarget = new BagTarget(bagActor);
         dragAndDrop.addTarget(bagTarget);
         targets.add(0,bagTarget);
-    }
-
-    private void addBagStage(){
-        stage.addActor(bagActor);
     }
 
     @Override

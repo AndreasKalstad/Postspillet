@@ -13,14 +13,12 @@ public class Bag {
 	private int level;
 	private TextureRegion texture;
 	private Country country;
-	
+    private boolean increasedLevel;
+
     public Bag(ArrayList<BagActor> bags, ArrayList<LetterActor> letters) {
     	country = new Country();
     	country.giveCountry(this, bags, letters);
     	level = 0;
-    }
-    
-    public Bag() {
     }
 	
     public void setCountry(String countryString) {
@@ -46,6 +44,15 @@ public class Bag {
     public void increaseLevel(){
     	level++;
     	country.updateLevel(this);
+        increasedLevel = true;
+    }
+
+    public boolean isLevelIncreased(){
+        return increasedLevel;
+    }
+
+    public void setLevelIncreased(){
+        increasedLevel = false;
     }
     
     public int getLevel(){
