@@ -1,4 +1,4 @@
-package com.glow.sortit.objects;
+package com.glow.sortit.main;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
@@ -11,6 +11,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.glow.sortit.main.Glow;
+import com.glow.sortit.main.PostGame;
 
 public class Pause implements Screen {
 

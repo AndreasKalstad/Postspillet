@@ -1,6 +1,6 @@
 package com.glow.sortit.android;
 
-import com.glow.sortit.objects.PostGame;
+import com.glow.sortit.main.PostGame;
 import android.os.Bundle;
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;

@@ -1,4 +1,4 @@
-package com.glow.sortit.objects;
+package com.glow.sortit.animations;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;

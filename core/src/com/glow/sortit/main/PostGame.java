@@ -1,7 +1,6 @@
-package com.glow.sortit.objects;
+package com.glow.sortit.main;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 
 public class PostGame extends Game {
