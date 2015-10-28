@@ -1,0 +1,263 @@
+bagPickup002.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+bagPickup0006
+  rotate: false
+  xy: 0, 0
+  size: 145, 193
+  orig: 145, 193
+  offset: 0, 0
+  index: -1
+bagPickup0007
+  rotate: false
+  xy: 145, 0
+  size: 145, 193
+  orig: 145, 193
+  offset: 0, 0
+  index: -1
+bagPickup0008
+  rotate: false
+  xy: 290, 0
+  size: 145, 193
+  orig: 145, 193
+  offset: 0, 0
+  index: -1
+bagPickup0009
+  rotate: false
+  xy: 435, 0
+  size: 145, 193
+  orig: 145, 193
+  offset: 0, 0
+  index: -1
+bagPickup0010
+  rotate: false
+  xy: 580, 0
+  size: 145, 193
+  orig: 145, 193
+  offset: 0, 0
+  index: -1
+bagPickup0011
+  rotate: false
+  xy: 725, 0
+  size: 145, 193
+  orig: 145, 193
+  offset: 0, 0
+  index: -1
+bagPickup0012
+  rotate: false
+  xy: 870, 0
+  size: 145, 193
+  orig: 145, 193
+  offset: 0, 0
+  index: -1
+bagPickup0013
+  rotate: false
+  xy: 1015, 0
+  size: 145, 193
+  orig: 145, 193
+  offset: 0, 0
+  index: -1
+bagPickup0014
+  rotate: false
+  xy: 1160, 0
+  size: 145, 193
+  orig: 145, 193
+  offset: 0, 0
+  index: -1
+bagPickup0015
+  rotate: false
+  xy: 1305, 0
+  size: 145, 193
+  orig: 145, 193
+  offset: 0, 0
+  index: -1
+bagPickup0016
+  rotate: false
+  xy: 1450, 0
+  size: 145, 193
+  orig: 145, 193
+  offset: 0, 0
+  index: -1
+bagPickup0017
+  rotate: false
+  xy: 1595, 0
+  size: 145, 193
+  orig: 145, 193
+  offset: 0, 0
+  index: -1
+bagPickup0018
+  rotate: false
+  xy: 1740, 0
+  size: 145, 193
+  orig: 145, 193
+  offset: 0, 0
+  index: -1
+bagPickup0019
+  rotate: false
+  xy: 0, 193
+  size: 145, 193
+  orig: 145, 193
+  offset: 0, 0
+  index: -1
+bagPickup0020
+  rotate: false
+  xy: 145, 193
+  size: 145, 193
+  orig: 145, 193
+  offset: 0, 0
+  index: -1
+bagPickup0021
+  rotate: false
+  xy: 290, 193
+  size: 145, 193
+  orig: 145, 193
+  offset: 0, 0
+  index: -1
+bagPickup0022
+  rotate: false
+  xy: 435, 193
+  size: 145, 193
+  orig: 145, 193
+  offset: 0, 0
+  index: -1
+bagPickup0023
+  rotate: false
+  xy: 580, 193
+  size: 145, 193
+  orig: 145, 193
+  offset: 0, 0
+  index: -1
+bagPickup0024
+  rotate: false
+  xy: 725, 193
+  size: 145, 193
+  orig: 145, 193
+  offset: 0, 0
+  index: -1
+bagPickup0025
+  rotate: false
+  xy: 870, 193
+  size: 145, 193
+  orig: 145, 193
+  offset: 0, 0
+  index: -1
+bagPickup0026
+  rotate: false
+  xy: 1015, 193
+  size: 145, 193
+  orig: 145, 193
+  offset: 0, 0
+  index: -1
+bagPickup0027
+  rotate: false
+  xy: 1160, 193
+  size: 145, 193
+  orig: 145, 193
+  offset: 0, 0
+  index: -1
+bagPickup0028
+  rotate: false
+  xy: 1305, 193
+  size: 145, 193
+  orig: 145, 193
+  offset: 0, 0
+  index: -1
+bagPickup0029
+  rotate: false
+  xy: 1450, 193
+  size: 145, 193
+  orig: 145, 193
+  offset: 0, 0
+  index: -1
+bagPickup0030
+  rotate: false
+  xy: 1595, 193
+  size: 145, 193
+  orig: 145, 193
+  offset: 0, 0
+  index: -1
+bagPickup0031
+  rotate: false
+  xy: 1740, 193
+  size: 145, 193
+  orig: 145, 193
+  offset: 0, 0
+  index: -1
+bagPickup0032
+  rotate: false
+  xy: 0, 386
+  size: 145, 193
+  orig: 145, 193
+  offset: 0, 0
+  index: -1
+bagPickup0033
+  rotate: false
+  xy: 145, 386
+  size: 145, 193
+  orig: 145, 193
+  offset: 0, 0
+  index: -1
+bagPickup0034
+  rotate: false
+  xy: 290, 386
+  size: 145, 193
+  orig: 145, 193
+  offset: 0, 0
+  index: -1
+bagPickup0035
+  rotate: false
+  xy: 435, 386
+  size: 145, 193
+  orig: 145, 193
+  offset: 0, 0
+  index: -1
+bagPickup0036
+  rotate: false
+  xy: 580, 386
+  size: 145, 193
+  orig: 145, 193
+  offset: 0, 0
+  index: -1
+bagPickup0037
+  rotate: false
+  xy: 725, 386
+  size: 145, 193
+  orig: 145, 193
+  offset: 0, 0
+  index: -1
+bagPickup0038
+  rotate: false
+  xy: 870, 386
+  size: 145, 193
+  orig: 145, 193
+  offset: 0, 0
+  index: -1
+bagPickup0039
+  rotate: false
+  xy: 1015, 386
+  size: 145, 193
+  orig: 145, 193
+  offset: 0, 0
+  index: -1
+bagPickup0040
+  rotate: false
+  xy: 1160, 386
+  size: 145, 193
+  orig: 145, 193
+  offset: 0, 0
+  index: -1
+bagPickup0041
+  rotate: false
+  xy: 1305, 386
+  size: 145, 193
+  orig: 145, 193
+  offset: 0, 0
+  index: -1
+bagPickup0042
+  rotate: false
+  xy: 1450, 386
+  size: 145, 193
+  orig: 145, 193
+  offset: 0, 0
+  index: -1

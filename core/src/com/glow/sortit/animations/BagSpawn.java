@@ -3,6 +3,7 @@ package com.glow.sortit.animations;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -13,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 public class BagSpawn extends Image {
     protected Animation animation = null;
     private float stateTime;
-    private Texture BagSpawn;
+    private TextureAtlas bagSpawn;
     private TextureRegion[] bagSpawnRegion;
     private static final int FRAME_COLS_BAG_SPAWN = 2;
     private static final int FRAME_ROWS_BAG_SPAWN = 25;
@@ -27,11 +28,11 @@ public class BagSpawn extends Image {
         setPosition(0, screenHeight/1.65f);
     }
 
-    public void setEscalatorStateTime(float stateTime){
+    public void setBagSpawnStateTime(float stateTime){
         this.stateTime = stateTime;
     }
 
-    public float getEscalatorStateTime(){
+    public float getBagSpawnStateTime(){
         return stateTime;
     }
 
@@ -45,19 +46,21 @@ public class BagSpawn extends Image {
         super.act(delta);
     }
 
-    //Escalator back animation
+    //Bagspawn back animation
     private void createAnimation(){
-        BagSpawn = new Texture(Gdx.files.internal("bagSpawn/bagSpawn.png"));
+        bagSpawn = new TextureAtlas("bagSpawn/BagSpawnFinal.txt");
+        bagSpawn.findRegion("BagSpawnFinal.png");
 
-        TextureRegion[][] bs = TextureRegion.split(BagSpawn, BagSpawn.getWidth() / FRAME_COLS_BAG_SPAWN, BagSpawn.getHeight() / FRAME_ROWS_BAG_SPAWN);
-        bagSpawnRegion = new TextureRegion[FRAME_COLS_BAG_SPAWN * FRAME_ROWS_BAG_SPAWN];
-        int in = 0;
-        for (int i = 0; i < FRAME_ROWS_BAG_SPAWN; i++) {
-            for (int j = 0; j < FRAME_COLS_BAG_SPAWN; j++) {
-                bagSpawnRegion[in++] = bs[i][j];
+        //Anim-------------------------------------
+        TextureAtlas.AtlasRegion[] trAni = new TextureAtlas.AtlasRegion[30];
+        for(int i = 0; i < 50; i++)
+        {
+            if(i < 10) {
+                trAni[i] = bagSpawn.findRegion("bagSpawn000" + i + " copy");
+            } else {
+                trAni[i] = bagSpawn.findRegion("bagSpawn00" + i + " copy");
             }
         }
-        Animation bagSpawnAnimation = new Animation(0.1f, bagSpawnRegion);
-        animation = bagSpawnAnimation;
+        animation = new Animation(0.04f, trAni);
     }
 }

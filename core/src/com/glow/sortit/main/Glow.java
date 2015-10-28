@@ -166,7 +166,7 @@ public class Glow implements Screen {
         targets = new ArrayList<BagTarget>(6);
 
         //Bag pickup
-        bagPickUpTexture = new Texture(Gdx.files.internal("bagPickup/bagPickup002.png"));
+        /*bagPickUpTexture = new Texture(Gdx.files.internal("bagPickup/bagPickup002.png"));
 
         TextureRegion[][] bpr = TextureRegion.split(bagPickUpTexture, bagPickUpTexture.getWidth() / FRAME_COLS_BAG_PICKUP, bagPickUpTexture.getHeight() / FRAME_ROWS_BAG_PICKUP);
         bagPickUpRegion = new TextureRegion[FRAME_COLS_BAG_PICKUP * FRAME_ROWS_BAG_PICKUP];
@@ -175,7 +175,7 @@ public class Glow implements Screen {
             for (int j = 0; j < FRAME_COLS_BAG_PICKUP; j++) {
                 bagPickUpRegion[entry++] = bpr[i][j];
             }
-        }
+        } */
 
         escalatorAnimation = new Escalator(screenWidth, screenHeight);
 
@@ -194,7 +194,7 @@ public class Glow implements Screen {
 
         fireFrame = fireAnimation.getKeyFrame(fireStateTime, true);
 
-        bagSpawnAnimation = new BagSpawn(screenWidth, screenHeight);
+        //bagSpawnAnimation = new BagSpawn(screenWidth, screenHeight);
 
         inputMultiplexer = new InputMultiplexer();
 
@@ -214,7 +214,7 @@ public class Glow implements Screen {
         stage.addActor(pauseButton);
         stage.addActor(backgroundActor);
         stage.addActor(escalatorAnimation);
-        stage.addActor(bagSpawnAnimation);
+        //stage.addActor(bagSpawnAnimation);
     }
 
     private InputProcessor initPause(){
@@ -265,16 +265,16 @@ public class Glow implements Screen {
             stage.getRoot().removeActor(splashActor);
         }
 
-        if (bagSpawnMoveTime < bagSpawnAnimation.getAnimation().getAnimationDuration()) {
+/*        if (bagSpawnMoveTime < bagSpawnAnimation.getAnimation().getAnimationDuration()) {
             // Speed of bag spawn
             if(!pause){
                 bagSpawnStateTime += delta;
                 bagSpawnMoveTime += delta;
-                bagSpawnAnimation.setEscalatorStateTime(bagSpawnStateTime);
+                bagSpawnAnimation.setBagSpawnStateTime(bagSpawnStateTime);
             }
 
             bagSpawnFrame = bagSpawnAnimation.getAnimation().getKeyFrame(bagSpawnStateTime, false);
-        }
+        } */
 
         //Check if bag pick up is queued
         if (escalatorMoveTime >= escalatorAnimation.getAnimation().getAnimationDuration()/1.8 && pickUp == true) {
@@ -334,7 +334,7 @@ public class Glow implements Screen {
             if(bags.get(i).getBag().isFull()){
                 pickUp = true;
                 if(bgu[i] == null && removed){
-                    BagPickUp bguObject = new BagPickUp(0, 0, bagPickUpAnimation);
+                    BagPickUp bguObject = new BagPickUp(0, 0);
                     bgu[i] = bguObject;
                     dragAndDrop.removeTarget(targets.get(i));
                     bagPickUpIndex[i] = true;
@@ -389,8 +389,8 @@ public class Glow implements Screen {
         for(int i = 0; i < bgu.length; i++){
             if(bgu[i] != null){
                 Sprite bagSpritePickUpFrame = new Sprite(bgu[i].getBagPickUpFrame());
-                bagSpritePickUpFrame.setSize(screenWidth/5.51f, screenHeight/2.487f);
-                bagSpritePickUpFrame.setPosition((float) bagValues[i]+(bagSize/2)-(float)(bagSpritePickUpFrame.getWidth()/2), screenHeight-bagSpritePickUpFrame.getHeight());
+                bagSpritePickUpFrame.setSize(screenWidth / 5.51f, screenHeight / 2.487f);
+                bagSpritePickUpFrame.setPosition((float) bagValues[i] + bagSize - (bagSpritePickUpFrame.getWidth() / 2), screenHeight-bagSpritePickUpFrame.getHeight()+bagSize/4);
                 bagSpritePickUpFrame.draw(batch);
             }
         }
@@ -489,11 +489,11 @@ public class Glow implements Screen {
 
     private void spawnBag() {
         Bag bag = new Bag(bags, letters);
-        bagActor = new BagActor(bag,-bagSpawnFrame.getRegionWidth(), screenWidth, screenHeight);
+        bagActor = new BagActor(bag,-94.42f, screenWidth, screenHeight);
         stage.addActor(bagActor);
-        bagSpawnAnimation.remove();
-        bagSpawnAnimation = new BagSpawn(screenWidth, screenHeight);
-        stage.addActor(bagSpawnAnimation);
+        //bagSpawnAnimation.remove();
+        //bagSpawnAnimation = new BagSpawn(screenWidth, screenHeight);
+        //stage.addActor(bagSpawnAnimation);
         bags.add(0, bagActor);
         BagTarget bagTarget = new BagTarget(bagActor);
         dragAndDrop.addTarget(bagTarget);

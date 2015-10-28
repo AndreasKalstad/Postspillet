@@ -9,7 +9,7 @@ public class BagActor extends Image{
 
 	private Bag bag;
 	
-    public BagActor(Bag bag, int startX, float screenWidth, float screenHeight) {
+    public BagActor(Bag bag, float startX, float screenWidth, float screenHeight) {
         this.bag = bag;
         this.setDrawable(new SpriteDrawable(new Sprite(bag.getTextureRegion())));
         setBounds(startX, screenHeight / 1.75f, screenWidth / 9.5f, screenHeight / 4f);

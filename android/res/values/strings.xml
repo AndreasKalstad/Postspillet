@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Sort it!</string>
+    <string name="app_name">Sortit!</string>
 	<integer name="google_play_services_version">6587000</integer>
-	<string name="app_id">1056240957724</string>
+	<string name="app_id">301822802764</string>
 	<string name="achievement_score_100_points">CgkInPL35t4eEAIQAQ</string>
 	<string name="achievement_score_200">CgkInPL35t4eEAIQAg</string>
 	<string name="achievement_score_500">CgkInPL35t4eEAIQAw</string>

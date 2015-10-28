@@ -1,0 +1,354 @@
+bagSpawn.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+bagSpawn0000
+  rotate: true
+  xy: 84, 119
+  size: 2, 13
+  orig: 2, 13
+  offset: 0, -161
+  index: -1
+bagSpawn0001
+  rotate: true
+  xy: 97, 119
+  size: 2, 13
+  orig: 2, 13
+  offset: 0, -161
+  index: -1
+bagSpawn0002
+  rotate: true
+  xy: 110, 119
+  size: 2, 13
+  orig: 2, 13
+  offset: 0, -161
+  index: -1
+bagSpawn0003
+  rotate: true
+  xy: 43, 122
+  size: 2, 90
+  orig: 2, 90
+  offset: 0, -84
+  index: -1
+bagSpawn0004
+  rotate: false
+  xy: 124, 0
+  size: 8, 118
+  orig: 8, 118
+  offset: 0, -56
+  index: -1
+bagSpawn0005
+  rotate: false
+  xy: 0, 0
+  size: 16, 128
+  orig: 16, 128
+  offset: 0, -46
+  index: -1
+bagSpawn0006
+  rotate: false
+  xy: 16, 0
+  size: 27, 124
+  orig: 27, 124
+  offset: 0, -50
+  index: -1
+bagSpawn0007
+  rotate: false
+  xy: 84, 0
+  size: 40, 119
+  orig: 40, 119
+  offset: 0, -55
+  index: -1
+bagSpawn0008
+  rotate: false
+  xy: 0, 255
+  size: 53, 112
+  orig: 53, 112
+  offset: 0, -62
+  index: -1
+bagSpawn0009
+  rotate: true
+  xy: 53, 345
+  size: 67, 104
+  orig: 67, 104
+  offset: 0, -70
+  index: -1
+bagSpawn0010
+  rotate: false
+  xy: 331, 213
+  size: 79, 94
+  orig: 79, 94
+  offset: 0, -80
+  index: -1
+bagSpawn0011
+  rotate: true
+  xy: 331, 124
+  size: 89, 83
+  orig: 89, 83
+  offset: 0, -91
+  index: -1
+bagSpawn0012
+  rotate: true
+  xy: 258, 315
+  size: 97, 73
+  orig: 97, 73
+  offset: 0, -101
+  index: -1
+bagSpawn0013
+  rotate: false
+  xy: 296, 60
+  size: 103, 64
+  orig: 103, 64
+  offset: 0, -110
+  index: -1
+bagSpawn0014
+  rotate: false
+  xy: 296, 0
+  size: 106, 60
+  orig: 106, 60
+  offset: 0, -118
+  index: -1
+bagSpawn0015
+  rotate: true
+  xy: 177, 0
+  size: 108, 58
+  orig: 108, 58
+  offset: 0, -125
+  index: -1
+bagSpawn0016
+  rotate: true
+  xy: 19, 127
+  size: 109, 57
+  orig: 109, 57
+  offset: 0, -130
+  index: -1
+bagSpawn0017
+  rotate: true
+  xy: 53, 236
+  size: 109, 56
+  orig: 109, 56
+  offset: 0, -134
+  index: -1
+bagSpawn0018
+  rotate: true
+  xy: 76, 127
+  size: 109, 56
+  orig: 109, 56
+  offset: 0, -135
+  index: -1
+bagSpawn0019
+  rotate: true
+  xy: 76, 127
+  size: 109, 56
+  orig: 109, 56
+  offset: 0, -135
+  index: -1
+bagSpawn0020
+  rotate: true
+  xy: 76, 127
+  size: 109, 56
+  orig: 109, 56
+  offset: 0, -135
+  index: -1
+bagSpawn0021
+  rotate: true
+  xy: 76, 127
+  size: 109, 56
+  orig: 109, 56
+  offset: 0, -135
+  index: -1
+bagSpawn0022
+  rotate: true
+  xy: 76, 127
+  size: 109, 56
+  orig: 109, 56
+  offset: 0, -135
+  index: -1
+bagSpawn0023
+  rotate: true
+  xy: 76, 127
+  size: 109, 56
+  orig: 109, 56
+  offset: 0, -135
+  index: -1
+bagSpawn0024
+  rotate: true
+  xy: 76, 127
+  size: 109, 56
+  orig: 109, 56
+  offset: 0, -135
+  index: -1
+bagSpawn0025
+  rotate: true
+  xy: 76, 127
+  size: 109, 56
+  orig: 109, 56
+  offset: 0, -135
+  index: -1
+bagSpawn0026
+  rotate: true
+  xy: 76, 127
+  size: 109, 56
+  orig: 109, 56
+  offset: 0, -135
+  index: -1
+bagSpawn0027
+  rotate: true
+  xy: 76, 127
+  size: 109, 56
+  orig: 109, 56
+  offset: 0, -135
+  index: -1
+bagSpawn0028
+  rotate: true
+  xy: 76, 127
+  size: 109, 56
+  orig: 109, 56
+  offset: 0, -135
+  index: -1
+bagSpawn0029
+  rotate: true
+  xy: 76, 127
+  size: 109, 56
+  orig: 109, 56
+  offset: 0, -135
+  index: -1
+bagSpawn0030
+  rotate: true
+  xy: 76, 127
+  size: 109, 56
+  orig: 109, 56
+  offset: 0, -135
+  index: -1
+bagSpawn0031
+  rotate: true
+  xy: 76, 127
+  size: 109, 56
+  orig: 109, 56
+  offset: 0, -135
+  index: -1
+bagSpawn0032
+  rotate: true
+  xy: 76, 127
+  size: 109, 56
+  orig: 109, 56
+  offset: 0, -135
+  index: -1
+bagSpawn0033
+  rotate: true
+  xy: 109, 236
+  size: 109, 56
+  orig: 109, 56
+  offset: 0, -134
+  index: -1
+bagSpawn0034
+  rotate: true
+  xy: 132, 124
+  size: 109, 56
+  orig: 109, 56
+  offset: 0, -130
+  index: -1
+bagSpawn0035
+  rotate: true
+  xy: 188, 108
+  size: 108, 58
+  orig: 108, 58
+  offset: 0, -124
+  index: -1
+bagSpawn0036
+  rotate: true
+  xy: 235, 0
+  size: 106, 61
+  orig: 106, 61
+  offset: 0, -116
+  index: -1
+bagSpawn0037
+  rotate: false
+  xy: 157, 345
+  size: 101, 67
+  orig: 101, 67
+  offset: 0, -107
+  index: -1
+bagSpawn0038
+  rotate: true
+  xy: 331, 307
+  size: 94, 77
+  orig: 94, 77
+  offset: 0, -97
+  index: -1
+bagSpawn0039
+  rotate: false
+  xy: 246, 124
+  size: 85, 88
+  orig: 85, 88
+  offset: 0, -86
+  index: -1
+bagSpawn0040
+  rotate: false
+  xy: 225, 216
+  size: 73, 99
+  orig: 73, 99
+  offset: 0, -75
+  index: -1
+bagSpawn0041
+  rotate: false
+  xy: 165, 233
+  size: 60, 108
+  orig: 60, 108
+  offset: 0, -66
+  index: -1
+bagSpawn0042
+  rotate: false
+  xy: 132, 0
+  size: 45, 116
+  orig: 45, 116
+  offset: 0, -58
+  index: -1
+bagSpawn0043
+  rotate: false
+  xy: 43, 0
+  size: 31, 122
+  orig: 31, 122
+  offset: 0, -52
+  index: -1
+bagSpawn0044
+  rotate: false
+  xy: 0, 128
+  size: 19, 127
+  orig: 19, 127
+  offset: 0, -47
+  index: -1
+bagSpawn0045
+  rotate: false
+  xy: 74, 0
+  size: 10, 122
+  orig: 10, 122
+  offset: 0, -52
+  index: -1
+bagSpawn0046
+  rotate: true
+  xy: 16, 124
+  size: 3, 96
+  orig: 3, 96
+  offset: 0, -78
+  index: -1
+bagSpawn0047
+  rotate: true
+  xy: 123, 119
+  size: 2, 13
+  orig: 2, 13
+  offset: 0, -161
+  index: -1
+bagSpawn0048
+  rotate: true
+  xy: 132, 116
+  size: 2, 13
+  orig: 2, 13
+  offset: 0, -161
+  index: -1
+bagSpawn0049
+  rotate: true
+  xy: 84, 119
+  size: 2, 13
+  orig: 2, 13
+  offset: 0, -161
+  index: -1

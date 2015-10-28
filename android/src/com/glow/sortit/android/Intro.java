@@ -11,7 +11,7 @@ import com.google.android.gms.plus.Plus;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Bundle; 
+import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -25,22 +25,31 @@ public class Intro extends Activity implements ConnectionCallbacks, OnConnection
 	private boolean mAutoStartSignInFlow = true;
 	private boolean mSignInClicked = false;
 	private Button credit;
+    private Button exit;
 	private static int RC_SIGN_IN = 9001;
-	
-	   @SuppressLint("InlinedApi")
+    private static final int REQUEST_CODE_RESOLVE_ERR = 7;
+    // Request code to use when launching the resolution activity
+    private static final int REQUEST_RESOLVE_ERROR = 1001;
+    // Unique tag for the error dialog fragment
+    private static final String DIALOG_ERROR = "dialog_error";
+    // Bool to track whether the app is already resolving an error
+    private boolean mResolvingError = false;
+	private boolean mIntentInProgress;
+
+	@SuppressLint("InlinedApi")
 	   @Override
 	   public void onCreate(Bundle savedInstanceState) {
 	      super.onCreate(savedInstanceState);      
 	      setContentView(R.layout.intro);
-	      
+
 	      mGoogleApiClient = new GoogleApiClient.Builder(this)
 	      .addApi(Plus.API).addScope(Plus.SCOPE_PLUS_LOGIN)
           .addApi(Games.API).addScope(Games.SCOPE_GAMES)
           .addApi(Drive.API).addScope(Drive.SCOPE_APPFOLDER)
           .addConnectionCallbacks(this)
           .addOnConnectionFailedListener(this)
-          .build(); 
-	      
+          .build();
+
 	      start = (Button) findViewById(R.id.startgame);
 	      start.setOnClickListener(new OnClickListener() {
 	    	  public void onClick(View v) {
@@ -50,7 +59,11 @@ public class Intro extends Activity implements ConnectionCallbacks, OnConnection
 	      leaderboard = (Button) findViewById(R.id.leaderboard);
 	      leaderboard.setOnClickListener(new OnClickListener() {	
 	    	  public void onClick(View v) {
-	    		 startActivityForResult(Games.Leaderboards.getLeaderboardIntent(mGoogleApiClient, getResources().getString(R.string.event_leaderboard)), REQUEST_LEADERBOARD);
+                  mGoogleApiClient.connect();
+                  System.out.println(mGoogleApiClient.isConnected());
+                  if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
+                      startActivityForResult(Games.Leaderboards.getLeaderboardIntent(mGoogleApiClient, getResources().getString(R.string.event_leaderboard)), REQUEST_LEADERBOARD);
+                  }
 				}
 			});
 	      
@@ -67,6 +80,13 @@ public class Intro extends Activity implements ConnectionCallbacks, OnConnection
 	    		  startActivityForResult(Games.Achievements.getAchievementsIntent(mGoogleApiClient), REQUEST_ACHIEVEMENTS);
 				}
 			}); */
+
+           exit = (Button) findViewById(R.id.exitgame);
+           exit.setOnClickListener(new OnClickListener() {
+               public void onClick(View v) {
+                   System.exit(0);
+               }
+           });
 	      
 	      if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
 	    	    // Call a Play Games services API method, for example:
@@ -99,7 +119,6 @@ public class Intro extends Activity implements ConnectionCallbacks, OnConnection
 	@Override
 	public void onConnected(Bundle connectionHint) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -120,9 +139,40 @@ public class Intro extends Activity implements ConnectionCallbacks, OnConnection
 	    Games.signOut(mGoogleApiClient);
 	}
 
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
+	@Override
+	public void onConnectionFailed(ConnectionResult connectionResult) {
 
+	}
+
+    /*@Override
+    public void onConnectionFailed(ConnectionResult result) {
+		if (!mIntentInProgress && result.hasResolution()) {
+			try {
+				System.out.println(result.getErrorCode() + " " +result.getResolution());
+				mIntentInProgress = true;
+				result.startResolutionForResult(this, // your activity
+						RC_SIGN_IN);
+			} catch (IntentSender.SendIntentException e) {
+				// The intent was canceled before it was sent.  Return to the default
+				// state and attempt to connect to get an updated ConnectionResult.
+				System.out.println("Intentsender");
+				mIntentInProgress = false;
+				mGoogleApiClient.connect();
+			}
+		}
     }
+
+	@Override
+	protected void onActivityResult(int requestCode, int responseCode, Intent intent) {
+		System.out.println("Intentsender2");
+		if (requestCode == RC_SIGN_IN) {
+			mIntentInProgress = false;
+			System.out.println("Intentsender3");
+			if (!mGoogleApiClient.isConnecting()) {
+				System.out.println("Intentsender4");
+				mGoogleApiClient.connect();
+			}
+		}
+	} */
 }
 

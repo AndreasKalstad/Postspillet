@@ -69,7 +69,6 @@ public class Escalator extends Image {
                 escalatorRegion[index++] = tmp2[i][j];
             }
         }
-        Animation escalatorAnimation = new Animation(0.1f, escalatorRegion);
-        animation = escalatorAnimation;
+        animation = new Animation(0.1f, escalatorRegion);
     }
 }
