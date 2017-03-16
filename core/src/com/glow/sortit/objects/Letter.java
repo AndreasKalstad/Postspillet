@@ -17,13 +17,12 @@ public class Letter {
 	private static final int FRAME_COLS_LETTER = 5;
 	private static final int FRAME_ROWS_LETTER = 1;
 	private Random ran;
-	private CountryEvaluator ce;
+	private static CountryEvaluator ce = new CountryEvaluator();
 
 	public Letter() {
 		all = new Array<TextureRegion[]>();
 		makeTextures("brev/brevMangeland.png");
 		ran = new Random();
-		ce = new CountryEvaluator();
 		giveNationality();
 	}
 

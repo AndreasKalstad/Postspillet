@@ -33,6 +33,7 @@ import com.glow.sortit.draganddrop.BagTarget;
 import com.glow.sortit.draganddrop.LetterSource;
 import com.glow.sortit.objects.Bag;
 import com.glow.sortit.animations.BagPickUp;
+import com.glow.sortit.objects.CountryEvaluator;
 import com.glow.sortit.objects.Letter;
 import com.glow.sortit.tween.BitmapFontAccessor;
 import com.glow.sortit.user.User;
@@ -122,6 +123,8 @@ public class Glow implements Screen {
     public Glow(PostGame game){
         this.game = game;
         user = new User();
+        CountryEvaluator ce = new CountryEvaluator();
+        ce.restart();
 
         levelFont = new BitmapFont(Gdx.files.internal("fonts/showFont.fnt"), Gdx.files.internal("fonts/showFont_0.png"), false);
         levelFont.setColor(0.02f,1f,0.325f,1f);

@@ -13,7 +13,7 @@ import com.glow.sortit.user.User;
 
 public class Country {
 
-	private CountryEvaluator ce;
+	private static CountryEvaluator ce = new CountryEvaluator();;
 	private Array<TextureRegion[]> all;
 	private User user;
 	private static final int FRAME_COLS_BAG_SPAWN = 5;
@@ -21,7 +21,6 @@ public class Country {
 
 	public Country(){
 		this.user = new User();
-		ce = new CountryEvaluator();
 		all = new Array<TextureRegion[]>();
 		makeTextures("Bag/bagMangeland.png");
 	}
