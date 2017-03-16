@@ -13,15 +13,15 @@ public class Bag {
 	private int level;
 	private TextureRegion texture;
 	private Country country;
-    private boolean increasedLevel;
+	private boolean increasedLevel;
 
-    public Bag(ArrayList<BagActor> bags, ArrayList<LetterActor> letters) {
-    	country = new Country();
-    	country.giveCountry(this, bags, letters);
-    	level = 0;
-    }
-	
-    public void setCountry(String countryString) {
+	public Bag(ArrayList<BagActor> bags, ArrayList<LetterActor> letters) {
+		country = new Country();
+		country.giveCountry(this);
+		level = 0;
+	}
+
+	public void setCountry(String countryString) {
 		this.countryString = countryString;
 	}
 
@@ -34,35 +34,35 @@ public class Bag {
 	}
 
 	public String getCountry() {
-    	return countryString;
-    }
-    
-    public TextureRegion getTextureRegion(){
-    	return texture;
-    }
-    
-    public void increaseLevel(){
-    	level++;
-    	country.updateLevel(this);
-        increasedLevel = true;
-    }
+		return countryString;
+	}
 
-    public boolean isLevelIncreased(){
-        return increasedLevel;
-    }
+	public TextureRegion getTextureRegion(){
+		return texture;
+	}
 
-    public void setLevelIncreased(){
-        increasedLevel = false;
-    }
-    
-    public int getLevel(){
-    	return level;
-    }
-    
-    public boolean isFull(){
-    	if(level == 4){
-    		return true;
-    	}
-    	return false;
-    }
+	public void increaseLevel(){
+		level++;
+		country.updateLevel(this);
+		increasedLevel = true;
+	}
+
+	public boolean isLevelIncreased(){
+		return increasedLevel;
+	}
+
+	public void setLevelIncreased(){
+		increasedLevel = false;
+	}
+
+	public int getLevel(){
+		return level;
+	}
+
+	public boolean isFull(){
+		if(level == 4){
+			return true;
+		}
+		return false;
+	}
 }
