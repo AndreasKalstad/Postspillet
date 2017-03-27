@@ -7,7 +7,7 @@ import com.glow.sortit.objects.Letter;
 
 import java.util.Random;
 
-public class LetterActor extends Image{
+public class LetterActor extends Image {
 
 	private Stage stage;
 	private Letter letter;

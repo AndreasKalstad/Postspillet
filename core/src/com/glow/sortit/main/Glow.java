@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.glow.sortit.actors.BagActor;
+import com.glow.sortit.actors.EscalatorFrontActor;
 import com.glow.sortit.actors.LetterActor;
 
 import com.badlogic.gdx.Gdx;
@@ -47,6 +48,8 @@ public class Glow implements Screen {
     private OrthographicCamera camera;
     private SpriteBatch batch;
     private Stage stage;
+    private Stage middleStage;
+    private Stage backStage;
     private DragAndDrop dragAndDrop;
 
     private ArrayList<BagActor> bags;
@@ -117,6 +120,7 @@ public class Glow implements Screen {
     private boolean removed = true;
     private boolean pickUpQueue;
     private Animation bagPickUpAnimation;
+    private boolean escalatorExists;
 
     private float bagSize;
 
@@ -154,6 +158,8 @@ public class Glow implements Screen {
         spawnRate = 8000;
 
         stage = new Stage(new StretchViewport(screenWidth, screenHeight));
+        backStage = new Stage(new StretchViewport(screenWidth, screenHeight));
+        middleStage = new Stage(new StretchViewport(screenWidth, screenHeight));
 
         pauseButton = new ImageButton(new SpriteDrawable(new Sprite(new Texture(Gdx.files.internal("Play_Pause/BPause.png")))));
         pauseButton.setScale(0.5f);
@@ -213,10 +219,11 @@ public class Glow implements Screen {
         backgroundImage.setSize(screenWidth, screenHeight);
         backgroundActor = backgroundImage;
 
-        stage.addActor(splashActor);
-        stage.addActor(pauseButton);
-        stage.addActor(backgroundActor);
-        stage.addActor(escalatorAnimation);
+        backStage.addActor(splashActor);
+        backStage.addActor(pauseButton);
+        backStage.addActor(backgroundActor);
+        backStage.addActor(escalatorAnimation);
+        stage.addActor(new EscalatorFrontActor(escalatorEdgeSprite, screenWidth, screenHeight));
         //stage.addActor(bagSpawnAnimation);
     }
 
@@ -238,6 +245,8 @@ public class Glow implements Screen {
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
+        backStage.getViewport().update(width, height, true);
+        middleStage.getViewport().update(width, height, true);
         viewport.update(width, height);
         screenWidth = width;
         screenHeight = height;
@@ -317,21 +326,23 @@ public class Glow implements Screen {
             bagValues = new double[] {ratio-bagSize, ratio*2-bagSize, ratio*3-bagSize, ratio*4-bagSize, ratio*5-bagSize, ratio*6-bagSize, ratio*7-bagSize};
         }
 
-        newBag();
-        newLetters();
 
-        stage.act(delta);
-        stage.draw();
+        //Drawing sequence
+        backStage.act(delta);
+        backStage.draw();
 
         batch.begin();
         Sprite fireSpriteFrame = new Sprite(fireFrame);
         fireSpriteFrame.setSize(screenWidth/5, screenHeight/4);
         fireSpriteFrame.setPosition(screenWidth-fireSpriteFrame.getWidth(), screenHeight/1.69f);
         fireSpriteFrame.draw(batch);
-        escalatorEdgeSprite.draw(batch);
-        escalatorEdgeSprite.setSize(screenWidth/5, screenHeight/5);
-        escalatorEdgeSprite.setPosition(screenWidth-escalatorEdgeSprite.getWidth(), screenHeight/2.42f);
         batch.end();
+
+        newLetters();
+        newBag();
+
+        stage.act(delta);
+        stage.draw();
 
         for(int i = 0; i<bags.size(); i++){
             if(bags.get(i).getBag().isFull()){
@@ -486,6 +497,7 @@ public class Glow implements Screen {
         LetterActor letterActor = new LetterActor(letter,stage);
         dragAndDrop.addSource(new LetterSource(letterActor, user, dragAndDrop));
         stage.addActor(letterActor);
+        letterActor.toFront();
         letters.add(letterActor);
         lastLetterTime = theTime;
     }
@@ -494,6 +506,7 @@ public class Glow implements Screen {
         Bag bag = new Bag(bags, letters);
         bagActor = new BagActor(bag,-94.42f, screenWidth, screenHeight);
         stage.addActor(bagActor);
+        bagActor.toBack();
         //bagSpawnAnimation.remove();
         //bagSpawnAnimation = new BagSpawn(screenWidth, screenHeight);
         //stage.addActor(bagSpawnAnimation);
@@ -516,6 +529,7 @@ public class Glow implements Screen {
 
     @Override
     public void dispose() {
+        backStage.dispose();
         stage.dispose();
         batch.dispose();
     }
